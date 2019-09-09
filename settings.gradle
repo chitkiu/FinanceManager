@@ -1,2 +1,2 @@
-include ':app', ':wear', ':logic'
+include ':app', ':wear', ':libs:logic', ':libs:unofficialtileapi'
 rootProject.name='FinanceManager'

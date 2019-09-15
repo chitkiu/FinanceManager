@@ -1,9 +1,16 @@
 package korotchenko.financemanager.base
 
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.android.AndroidInjection
 import korotchenko.financemanager.R
 
 abstract class BaseActivity : AppCompatActivity(){
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     fun showFragment(
         fragment: BaseFragment,

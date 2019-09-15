@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import korotchenko.financemanager.AccountDataRepository
+import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
 import korotchenko.financemanager.base.BaseFragment
 import korotchenko.financemanager.fragment.adapters.AccountsAdapter
 import kotlinx.android.synthetic.main.fragment_accounts.*
+import javax.inject.Inject
 
 class AccountsFragment : BaseFragment() {
 
-    private val accountDataRepository: AccountDataRepository = AccountDataRepository.getInstance()
+    @Inject
+    lateinit var accountDataRepository: AccountDataRepository
 
     override val layoutID: Int = R.layout.fragment_accounts
 

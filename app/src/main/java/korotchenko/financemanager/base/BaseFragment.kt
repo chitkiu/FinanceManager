@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import korotchenko.financemanager.R
 import korotchenko.financemanager.activity.MainActivity
@@ -28,6 +29,11 @@ abstract class BaseFragment : Fragment() {
     protected val TAG: String = javaClass.simpleName
 
     protected lateinit var compositeDisposable: CompositeDisposable
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

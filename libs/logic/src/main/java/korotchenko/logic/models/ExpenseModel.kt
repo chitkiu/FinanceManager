@@ -1,6 +1,6 @@
 package korotchenko.logic.models
 
-data class EnpenseModel(
+data class ExpenseModel(
     val id: Long,
     val description: String = "",
     val sum: Int,

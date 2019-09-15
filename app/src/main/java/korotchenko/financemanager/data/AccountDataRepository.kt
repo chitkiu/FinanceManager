@@ -11,7 +11,9 @@ class AccountDataRepository {
     }
 
     fun saveAccount(model: AccountModel) {
-        inMemoryAccountsList += model
+        if(!inMemoryAccountsList.contains(model)) {
+            inMemoryAccountsList += model
+        }
     }
 
     fun deleteAccount(model: AccountModel) {

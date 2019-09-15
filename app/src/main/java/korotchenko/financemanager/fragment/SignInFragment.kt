@@ -99,7 +99,7 @@ class SignInFragment : BaseFragment() {
         sign_in_credentials.visibility = View.VISIBLE
         sign_in_credentials.text = credential.toString()
         sign_out_button.visibility = View.VISIBLE*/
-        showFragment(AccountsFragment.newInstance())
+        showFragment(MainFragment.newInstance())
     }
 
     private fun onSignOutSuccess() {

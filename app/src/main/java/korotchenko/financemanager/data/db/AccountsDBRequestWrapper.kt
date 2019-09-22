@@ -3,7 +3,6 @@ package korotchenko.financemanager.data.db
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteOpenHelper
-import androidx.core.database.getStringOrNull
 import korotchenko.logic.models.AccountModel
 import javax.inject.Inject
 

@@ -45,6 +45,10 @@ class AccountsAdapter(
            }
            view.nameTextView.text = account.name
            view.balanceTextView.text = String.format("%.2f %s", account.balance, moneySymbol)
+
+           view.descriptionHintTextView.visibility = if(account.description.isNullOrBlank()) View.GONE else View.VISIBLE
+           view.descriptionTextView.visibility = if(account.description.isNullOrBlank()) View.GONE else View.VISIBLE
+           view.descriptionTextView.text = account.description
        }
     }
 }

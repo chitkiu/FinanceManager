@@ -16,10 +16,18 @@ class MainFragment : BaseFragment() {
         nav_view.setOnNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.navigation_dashboard -> {
-
+                    showFragment(
+                        fragment = DashboardFragment.newInstance(),
+                        container = R.id.main_fragment_container,
+                        addInBackStack = true
+                    )
                 }
                 R.id.navigation_transactions -> {
-
+                    showFragment(
+                        fragment = TransactionFragment.newInstance(),
+                        container = R.id.main_fragment_container,
+                        addInBackStack = true
+                    )
                 }
                 R.id.navigation_accounts -> {
                     showFragment(
@@ -29,11 +37,20 @@ class MainFragment : BaseFragment() {
                     )
                 }
                 R.id.navigation_settings -> {
-
+                    showFragment(
+                        fragment = SettingsFragment.newInstance(),
+                        container = R.id.main_fragment_container,
+                        addInBackStack = true
+                    )
                 }
             }
             return@setOnNavigationItemSelectedListener true
         }
+        showFragment(
+            fragment = DashboardFragment.newInstance(),
+            container = R.id.main_fragment_container,
+            addInBackStack = true
+        )
     }
 
     companion object {

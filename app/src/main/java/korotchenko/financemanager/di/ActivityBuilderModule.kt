@@ -25,4 +25,13 @@ abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun mainFragment(): MainFragment
+
+    @ContributesAndroidInjector
+    abstract fun transactionFragment(): TransactionFragment
+
+    @ContributesAndroidInjector
+    abstract fun dashboardFragment(): DashboardFragment
+
+    @ContributesAndroidInjector
+    abstract fun settingsFragment(): SettingsFragment
 }

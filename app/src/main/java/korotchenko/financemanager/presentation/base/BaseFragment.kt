@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import korotchenko.financemanager.R
@@ -22,11 +23,12 @@ abstract class BaseFragment : Fragment() {
             return activity as? MainActivity
         }
 
-    protected lateinit var googleSignInClient: GoogleSignInClient
+    protected val googleSignInClient: GoogleSignInClient?
+        get() = mainActivity?.googleSignInClient
 
     abstract val layoutID: Int
 
-    protected val TAG: String = javaClass.simpleName
+    val TAG: String = javaClass.simpleName
 
     protected lateinit var compositeDisposable: CompositeDisposable
 
@@ -39,12 +41,8 @@ abstract class BaseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(layoutID, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
         compositeDisposable = CompositeDisposable()
+        return inflater.inflate(layoutID, container, false)
     }
 
     override fun onPause() {

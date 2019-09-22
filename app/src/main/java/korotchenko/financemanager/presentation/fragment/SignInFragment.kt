@@ -23,12 +23,6 @@ class SignInFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        mainActivity?.let { mainActivity ->
-            googleSignInClient = GoogleSignIn.getClient(mainActivity, gso)
-        }
         sign_in_button.setOnClickListener {
             signInByGoogle()
         }
@@ -44,10 +38,11 @@ class SignInFragment : BaseFragment() {
         }
             .filter { it != null }
             .map { it as GoogleSignInAccount }
+            .map { mapToCredentialModel(it)}
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ account ->
-                onSignInSuccess(mapToCredentialModel(account))
+                onSignInSuccess(account)
             }, ::handleError)
     }
 
@@ -69,18 +64,18 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun signInByGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
+        val signInIntent = googleSignInClient?.signInIntent
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
     }
 
     private fun signOutFromGogle() {
-        val signOut = googleSignInClient.signOut()
-        signOut.addOnCompleteListener {
+        val signOut = googleSignInClient?.signOut()
+        signOut?.addOnCompleteListener {
             if(!it.isSuccessful) {
                 onSignOutError()
             }
         }
-        signOut.addOnSuccessListener {
+        signOut?.addOnSuccessListener {
             onSignOutSuccess()
         }
     }

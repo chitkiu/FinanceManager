@@ -34,7 +34,6 @@ before_install:
 - echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
 - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 - chmod +x gradlew
-- "ls"
 
 deploy:
   provider: releases
@@ -42,10 +41,8 @@ deploy:
     secure: luT9AhwZ1vAubz9WF3yoWUX3oJ4MFNealFpcrInFq68kFkMHfrYYSCr58ZGt3Q3x2HgFZVCVsFbBaWQSJequ24wKQPaLDpsi47GXr/TA4Ad81FRFv6OPMO71Gl2chuuZG8IwQ6Zqz97gBCMdxKytCbVR/btl7sC5pkDQeh4sL39XGo3ylo3H1Ae2Pq0sBsiuP8i8wsPU/ktphikwNzf2gII0aMDic9x5j0PnDpqKz4uqbQON8vDq14W9vo2rpZotpQq4cAeAel7qvfF7bck4/JoBcxbpPqfVJeBshTy9LlKpMM4esGORvZomJgadF99g+0TMMeM6WXZWestyZGW593nYGMi1gP+fY9YP9oc/zUYbdAr47NZLItrE+LwrO6S7ObGHzLgAwMN6wF0+8irW8buBBjXrMfFiS5+kHq1HTDGj3JYmy7uwObxONkpnosCKFmgtovd3weVIxjJFYobdPF5mfzpdI/Nu+G7F7O3JFZtT8Bh6sKU0wQ1ndjXpT7B5PQ0nurGXPm4xfa6bugNZK2vXKj/DeM7VUavtL5dTjHk/cRuSU7B96Oue+NGU/bZLBxZQ368ZCPoUkGrLPKCxHghHsh11i1cGvtxCOnGsvvUbK5J8eccaJPR7OTZBCRnu1/X/cSkQvsfld54wJzvpVL4Jzg+skFuKynEnbZy6PFA=
   file:
     - "app/build/outputs/apk/debug/app-debug.apk"
+    - "wear/build/outputs/apk/debug/wear-debug.apk"
   file_glob: "true"
   skip_cleanup: true
   on:
     repo: chitkiu/FinanceManager
-
-after_success:
-  - sh set_tags.sh

@@ -8,17 +8,20 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
+import korotchenko.financemanager.data.wearable.TransferDataManager
 import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.presentation.fragment.adapters.AccountsAdapter
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_accounts.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 class AccountsFragment : BaseFragment() {
 
     @Inject
     lateinit var accountDataRepository: AccountDataRepository
+
+    @Inject
+    lateinit var transferDataManager: TransferDataManager
 
     override val layoutID: Int = R.layout.fragment_accounts
 
@@ -45,11 +48,13 @@ class AccountsFragment : BaseFragment() {
         }
 
         accounts_list.layoutManager = LinearLayoutManager(context)
+        val accountList = accountDataRepository.getAccountsList()
+        transferDataManager.sendAccounts(accountList)
         accounts_list.adapter = AccountsAdapter(
             MONEY_SYMBOL,
             onAccountClick,
             onAccountLongClick,
-            accountDataRepository.getAccountsList()
+            accountList
         )
     }
 

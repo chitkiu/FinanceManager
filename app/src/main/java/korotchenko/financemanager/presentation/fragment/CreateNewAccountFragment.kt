@@ -53,7 +53,7 @@ class CreateNewAccountFragment : BaseFragment() {
             id = System.currentTimeMillis(),
             name = name_edittext.text.toString(),
             description = description_edittext.text.toString(),
-            balance = start_balance_edittext.text.toString().toDouble()
+            balance = start_balance_edittext.text.toString().toDoubleOrNull() ?: 0.0
         )
     }
 

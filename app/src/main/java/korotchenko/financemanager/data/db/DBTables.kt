@@ -13,11 +13,12 @@ sealed class DBTable<T>(
 }
 
 object AccountsTable: DBTable<AccountModel>("accounts") {
+
     override fun loadFromCursor(cursor: Cursor): AccountModel? {
-        val idColumn = cursor.getColumnIndex("id")
-        val nameColumn = cursor.getColumnIndex("name")
-        val descriptionColumn = cursor.getColumnIndex("description")
-        val balanceColumn = cursor.getColumnIndex("balance")
+        val idColumn = cursor.getColumnIndex(AccountModel.ID_KEY)
+        val nameColumn = cursor.getColumnIndex(AccountModel.NAME_KEY)
+        val descriptionColumn = cursor.getColumnIndex(AccountModel.DESCRIPTION_KEY)
+        val balanceColumn = cursor.getColumnIndex(AccountModel.BALANCE_KEY)
 
         return AccountModel(
             id = cursor.getLong(idColumn),
@@ -29,10 +30,10 @@ object AccountsTable: DBTable<AccountModel>("accounts") {
 
     override fun getContentValues(obj: AccountModel): ContentValues {
         val contentValues = ContentValues()
-        contentValues.put("id", obj.id)
-        contentValues.put("name", obj.name)
-        contentValues.put("description", obj.description)
-        contentValues.put("balance", obj.balance)
+        contentValues.put(AccountModel.ID_KEY, obj.id)
+        contentValues.put(AccountModel.NAME_KEY, obj.name)
+        contentValues.put(AccountModel.DESCRIPTION_KEY, obj.description)
+        contentValues.put(AccountModel.BALANCE_KEY, obj.balance)
         return contentValues
     }
 

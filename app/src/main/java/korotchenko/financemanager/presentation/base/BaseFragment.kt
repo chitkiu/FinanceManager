@@ -1,4 +1,4 @@
-package korotchenko.financemanager.base
+package korotchenko.financemanager.presentation.base
 
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import korotchenko.financemanager.R
-import korotchenko.financemanager.activity.MainActivity
+import korotchenko.financemanager.presentation.activity.MainActivity
 import korotchenko.logic.models.CredentialModel
 
 abstract class BaseFragment : Fragment() {

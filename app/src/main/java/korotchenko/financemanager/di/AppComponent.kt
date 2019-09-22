@@ -5,9 +5,8 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import korotchenko.financemanager.App
+import korotchenko.financemanager.presentation.App
 import javax.inject.Singleton
-
 
 @Component(modules = arrayOf(
     AndroidSupportInjectionModule::class,
@@ -16,6 +15,8 @@ import javax.inject.Singleton
 ))
 @Singleton
 interface AppComponent: AndroidInjector<App> {
+
+    override fun inject(app: App)
 
     @Component.Builder
     interface Builder {

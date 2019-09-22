@@ -1,11 +1,11 @@
-package korotchenko.financemanager.fragment
+package korotchenko.financemanager.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
-import korotchenko.financemanager.base.BaseFragment
+import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_create_new_account.*
 import javax.inject.Inject
@@ -44,7 +44,6 @@ class CreateNewAccountFragment : BaseFragment() {
         start_balance_input_layout.error = null
         name_input_layout.error = null
         when {
-            model.balance == null -> start_balance_input_layout.error = "Cannot be blank!"
             model.name.isBlank() -> name_input_layout.error = "Cannot be blank!"
         }
     }
@@ -54,7 +53,7 @@ class CreateNewAccountFragment : BaseFragment() {
             id = System.currentTimeMillis(),
             name = name_edittext.text.toString(),
             description = description_edittext.text.toString(),
-            balance = start_balance_edittext.text.toString().toDoubleOrNull()
+            balance = start_balance_edittext.text.toString().toDouble()
         )
     }
 

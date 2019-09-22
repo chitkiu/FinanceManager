@@ -1,12 +1,12 @@
-package korotchenko.financemanager.fragment
+package korotchenko.financemanager.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import korotchenko.financemanager.R
-import korotchenko.financemanager.base.BaseFragment
+import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.data.ExpenseDataRepository
-import korotchenko.financemanager.fragment.adapters.ExpensesAdapter
+import korotchenko.financemanager.presentation.fragment.adapters.ExpensesAdapter
 import kotlinx.android.synthetic.main.fragment_expenses.*
 import javax.inject.Inject
 

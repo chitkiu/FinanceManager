@@ -1,8 +1,11 @@
 package korotchenko.financemanager.data
 
 import korotchenko.logic.models.ExpenseModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ExpenseDataRepository {
+@Singleton
+class ExpenseDataRepository @Inject constructor(){
 
     private val inMemoryExpenseModelList: MutableList<ExpenseModel> = mutableListOf()
 

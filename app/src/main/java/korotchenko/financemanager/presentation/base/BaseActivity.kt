@@ -1,4 +1,4 @@
-package korotchenko.financemanager.base
+package korotchenko.financemanager.presentation.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

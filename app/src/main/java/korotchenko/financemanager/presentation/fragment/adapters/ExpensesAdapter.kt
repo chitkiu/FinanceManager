@@ -1,4 +1,4 @@
-package korotchenko.financemanager.fragment.adapters
+package korotchenko.financemanager.presentation.fragment.adapters
 
 import android.view.LayoutInflater
 import android.view.View

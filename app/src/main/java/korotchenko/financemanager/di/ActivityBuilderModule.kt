@@ -2,8 +2,8 @@ package korotchenko.financemanager.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import korotchenko.financemanager.activity.MainActivity
-import korotchenko.financemanager.fragment.*
+import korotchenko.financemanager.presentation.activity.MainActivity
+import korotchenko.financemanager.presentation.fragment.*
 
 @Module
 abstract class ActivityBuilderModule {

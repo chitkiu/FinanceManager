@@ -1,9 +1,9 @@
-package korotchenko.financemanager.activity
+package korotchenko.financemanager.presentation.activity
 
 import android.os.Bundle
 import korotchenko.financemanager.R
-import korotchenko.financemanager.base.BaseActivity
-import korotchenko.financemanager.fragment.SignInFragment
+import korotchenko.financemanager.presentation.base.BaseActivity
+import korotchenko.financemanager.presentation.fragment.SignInFragment
 
 class MainActivity : BaseActivity() {
 

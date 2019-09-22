@@ -1,4 +1,4 @@
-package korotchenko.financemanager
+package korotchenko.financemanager.presentation
 
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication

@@ -1,4 +1,4 @@
-package korotchenko.financemanager.fragment
+package korotchenko.financemanager.presentation.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.R
-import korotchenko.financemanager.base.BaseFragment
+import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.logic.models.CredentialModel
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 

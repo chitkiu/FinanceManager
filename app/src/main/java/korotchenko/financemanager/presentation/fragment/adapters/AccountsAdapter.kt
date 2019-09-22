@@ -1,6 +1,5 @@
-package korotchenko.financemanager.fragment.adapters
+package korotchenko.financemanager.presentation.fragment.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +11,20 @@ import kotlinx.android.synthetic.main.account_view_item.view.*
 
 class AccountsAdapter(
     private val moneySymbol: String,
-    private val onAccountSelect: (AccountModel) -> Unit,
+    private val onAccountClick: (AccountModel) -> Unit = {},
+    private val onAccountLongClick: (AccountModel, View) -> Unit = { _, _ -> },
     private val accountsList: List<AccountModel>
 ) : RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return AccountViewHolder(moneySymbol, inflater.inflate(R.layout.account_view_item, parent, false))
+        return AccountViewHolder(inflater.inflate(R.layout.account_view_item, parent, false))
     }
 
     override fun getItemCount(): Int = accountsList.size
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        holder.bind(accountsList[position], onAccountSelect)
+        holder.bind(accountsList[position])
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -32,13 +32,16 @@ class AccountsAdapter(
     }
 
     inner class AccountViewHolder(
-        private val moneySymbol: String,
         private val view: View
     ) : RecyclerView.ViewHolder(view) {
 
-       fun bind(account: AccountModel, onAccountSelect: (AccountModel) -> Unit) {
+       fun bind(account: AccountModel) {
            view.setOnClickListener {
-               onAccountSelect(account)
+               onAccountClick(account)
+           }
+           view.setOnLongClickListener {
+               onAccountLongClick(account, it)
+               return@setOnLongClickListener true
            }
            view.nameTextView.text = account.name
            view.balanceTextView.text = String.format("%.2f %s", account.balance, moneySymbol)

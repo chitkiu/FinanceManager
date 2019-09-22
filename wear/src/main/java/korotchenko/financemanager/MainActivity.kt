@@ -1,9 +1,8 @@
 package korotchenko.financemanager
 
 import android.os.Bundle
-import android.support.wearable.activity.WearableActivity
 import android.view.View
-import korotchenko.financemanager.base.BaseActivity
+import korotchenko.financemanager.presentation.base.BaseActivity
 import korotchenko.logic.models.CredentialModel
 import kotlinx.android.synthetic.main.activity_main.*
 

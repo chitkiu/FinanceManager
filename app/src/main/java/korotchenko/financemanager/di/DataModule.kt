@@ -1,21 +1,18 @@
 package korotchenko.financemanager.di
 
+import android.app.Application
+import android.content.Context
+import android.database.sqlite.SQLiteOpenHelper
 import dagger.Module
 import dagger.Provides
-import korotchenko.financemanager.data.AccountDataRepository
-import korotchenko.financemanager.data.ExpenseDataRepository
-import javax.inject.Singleton
+import korotchenko.financemanager.data.db.DBHelper
 
 @Module
 class DataModule {
 
     @Provides
-    @Singleton
-    fun accountDataRepository(): AccountDataRepository =
-        AccountDataRepository()
+    fun context(app: Application): Context = app.baseContext
 
     @Provides
-    @Singleton
-    fun expenseDataRepository(): ExpenseDataRepository =
-        ExpenseDataRepository()
+    fun dbHelper(context: Context): SQLiteOpenHelper = DBHelper(context)
 }

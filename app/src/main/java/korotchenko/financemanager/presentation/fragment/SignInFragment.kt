@@ -42,7 +42,7 @@ class SignInFragment : BaseFragment() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ account ->
-                onSignInSuccess(account)
+                onSignInSuccess()
             }, ::handleError)
     }
 
@@ -51,12 +51,10 @@ class SignInFragment : BaseFragment() {
         if(requestCode == GOOGLE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                val account = task.getResult(ApiException::class.java)
-                if (account != null) {
-                    onSignInSuccess(mapToCredentialModel(account))
-                } else {
-                    onSignInError()
-                }
+                task
+                    .getResult(ApiException::class.java)
+                    ?.let{ onSignInSuccess() }
+                    ?: onSignInError()
             } catch (e: ApiException) {
                 onSignInError()
             }
@@ -87,14 +85,12 @@ class SignInFragment : BaseFragment() {
         sign_out_button.visibility = View.GONE
     }
 
-    private fun onSignInSuccess(credential: CredentialModel) {/*
-        sign_in_button.visibility = View.GONE
-        sign_in_text.visibility = View.VISIBLE
-        sign_out_button.visibility = View.VISIBLE
-        sign_in_credentials.visibility = View.VISIBLE
-        sign_in_credentials.text = credential.toString()
-        sign_out_button.visibility = View.VISIBLE*/
-        showFragment(MainFragment.newInstance())
+    private fun onSignInSuccess() {
+        showFragment(
+            fragment = MainFragment.newInstance(),
+            addInBackStack = false,
+            shouldAddOrReplace = false
+        )
     }
 
     private fun onSignOutSuccess() {

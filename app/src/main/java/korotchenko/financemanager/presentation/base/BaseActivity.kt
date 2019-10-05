@@ -12,14 +12,25 @@ abstract class BaseActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
     }
 
+    override fun onBackPressed() = if(supportFragmentManager.backStackEntryCount == 0) {
+            super.onBackPressed()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+
     fun showFragment(
         fragment: BaseFragment,
         container: Int = R.id.fragment_container,
-        addInBackStack: Boolean = true
+        addInBackStack: Boolean = true,
+        shouldAddOrReplace: Boolean = true
     ) {
         val t = supportFragmentManager.beginTransaction()
-        t.replace(container, fragment)
-        if(addInBackStack) {
+        if (shouldAddOrReplace) {
+            t.add(container, fragment)
+        } else {
+            t.replace(container, fragment)
+        }
+        if (addInBackStack) {
             t.addToBackStack(fragment.tag)
         }
         t.commit()

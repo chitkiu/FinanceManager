@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import korotchenko.financemanager.R
@@ -72,8 +71,9 @@ abstract class BaseFragment : Fragment() {
     protected fun showFragment(
         fragment: BaseFragment,
         container: Int = R.id.fragment_container,
-        addInBackStack: Boolean = true
+        addInBackStack: Boolean = true,
+        shouldAddOrReplace: Boolean = true
     ) {
-        mainActivity?.showFragment(fragment, container, addInBackStack)
+        mainActivity?.showFragment(fragment, container, addInBackStack, shouldAddOrReplace)
     }
 }

@@ -4,18 +4,20 @@ package korotchenko.financemanager.presentation.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxkotlin.plusAssign
 import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
 import korotchenko.financemanager.data.wearable.TransferDataManager
 import korotchenko.financemanager.presentation.base.BaseFragment
+import korotchenko.financemanager.presentation.communicators.*
 import korotchenko.financemanager.presentation.fragment.adapters.AccountsAdapter
-import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_accounts.*
 import javax.inject.Inject
 
 class AccountsFragment : BaseFragment() {
+
+    private lateinit var accountAdapter: AccountsAdapter
 
     @Inject
     lateinit var accountDataRepository: AccountDataRepository
@@ -23,39 +25,53 @@ class AccountsFragment : BaseFragment() {
     @Inject
     lateinit var transferDataManager: TransferDataManager
 
+    @Inject
+    lateinit var accountActionCommunicator: AccountActionCommunicator
+
     override val layoutID: Int = R.layout.fragment_accounts
-
-    private val onAccountClick: (AccountModel) -> Unit = { account ->
-        Toast.makeText(context, "Select ${account.name}!", Toast.LENGTH_LONG).show()
-    }
-
-    private val onAccountLongClick: (AccountModel, View) -> Unit = { account, view ->
-        val popUpMenu = PopupMenu(context!!, view)
-        popUpMenu.menu.add("Delete").setOnMenuItemClickListener {
-            accountDataRepository.deleteAccount(account)
-            return@setOnMenuItemClickListener true
-        }
-        popUpMenu.show()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         fab_add_account.setOnClickListener {
             showFragment(
-                fragment = CreateNewAccountFragment.newInstance()
+                fragment = CreateNewAccountFragment.newInstance(),
+                addInBackStack = true,
+                shouldAddOrReplace = true
             )
         }
 
         accounts_list.layoutManager = LinearLayoutManager(context)
-        val accountList = accountDataRepository.getAccountsList()
-        transferDataManager.sendAccounts(accountList)
-        accounts_list.adapter = AccountsAdapter(
+        accountAdapter = AccountsAdapter(
             MONEY_SYMBOL,
-            onAccountClick,
-            onAccountLongClick,
-            accountList
+            accountActionCommunicator,
+            accountDataRepository.getAccountsList()
         )
+        accounts_list.adapter = accountAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        compositeDisposable += accountActionCommunicator
+            .observeAction()
+            .subscribe(::handleAccountUpdate, ::handleError)
+    }
+
+    private fun handleAccountUpdate(accountAction: AccountAction) {
+        when(accountAction) {
+            is AccountSelect -> {
+                Toast.makeText(context, "Select ${accountAction.accountModel.name}!", Toast.LENGTH_LONG).show()
+            }
+            is AccountDelete -> {
+                accountDataRepository.deleteAccount(accountAction.accountModel)
+                accountAdapter.setDate(accountDataRepository.getAccountsList())
+                accountAdapter.notifyDataSetChanged()
+            }
+            is AccountCreate -> {
+                accountAdapter.setDate(accountDataRepository.getAccountsList())
+                accountAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     companion object {

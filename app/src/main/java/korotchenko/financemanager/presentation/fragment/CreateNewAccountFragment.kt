@@ -6,6 +6,8 @@ import androidx.core.widget.addTextChangedListener
 import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
+import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
+import korotchenko.financemanager.presentation.communicators.AccountCreate
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_create_new_account.*
 import javax.inject.Inject
@@ -14,6 +16,9 @@ class CreateNewAccountFragment : BaseFragment() {
 
     @Inject
     lateinit var accountDataRepository: AccountDataRepository
+
+    @Inject
+    lateinit var accountActionCommunicator: AccountActionCommunicator
 
     override val layoutID: Int = R.layout.fragment_create_new_account
 
@@ -28,7 +33,9 @@ class CreateNewAccountFragment : BaseFragment() {
             if(!name_input_layout.error.isNullOrBlank()) {
                 return@setOnClickListener
             }
-            accountDataRepository.saveAccount(buildModel())
+            val accModel = buildModel()
+            accountDataRepository.saveAccount(accModel)
+            accountActionCommunicator.sendAction(AccountCreate(accModel))
             activity?.onBackPressed()
         }
 

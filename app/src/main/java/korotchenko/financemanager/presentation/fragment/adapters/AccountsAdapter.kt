@@ -3,17 +3,21 @@ package korotchenko.financemanager.presentation.fragment.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import korotchenko.financemanager.R
+import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
+import korotchenko.financemanager.presentation.communicators.AccountDelete
+import korotchenko.financemanager.presentation.communicators.AccountSelect
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.account_view_item.view.*
 
 
 class AccountsAdapter(
     private val moneySymbol: String,
-    private val onAccountClick: (AccountModel) -> Unit = {},
-    private val onAccountLongClick: (AccountModel, View) -> Unit = { _, _ -> },
-    private val accountsList: List<AccountModel>
+    private val accountActionCommunicator: AccountActionCommunicator,
+    private var accountsList: List<AccountModel>
 ) : RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
@@ -31,23 +35,33 @@ class AccountsAdapter(
         return R.layout.account_view_item
     }
 
+    fun setDate(accounts: List<AccountModel>) {
+        accountsList = accounts
+        notifyDataSetChanged()
+    }
+
     inner class AccountViewHolder(
         private val view: View
     ) : RecyclerView.ViewHolder(view) {
 
        fun bind(account: AccountModel) {
            view.setOnClickListener {
-               onAccountClick(account)
+               accountActionCommunicator.sendAction(AccountSelect(account))
            }
            view.setOnLongClickListener {
-               onAccountLongClick(account, it)
+               val popUpMenu = PopupMenu(it.context, it)
+               popUpMenu.menu.add("Delete").setOnMenuItemClickListener {
+                   accountActionCommunicator.sendAction(AccountDelete(account))
+                   return@setOnMenuItemClickListener true
+               }
+               popUpMenu.show()
                return@setOnLongClickListener true
            }
            view.nameTextView.text = account.name
            view.balanceTextView.text = String.format("%.2f %s", account.balance, moneySymbol)
 
-           view.descriptionHintTextView.visibility = if(account.description.isNullOrBlank()) View.GONE else View.VISIBLE
-           view.descriptionTextView.visibility = if(account.description.isNullOrBlank()) View.GONE else View.VISIBLE
+           view.descriptionHintTextView.visibility = if(account.description.isBlank()) View.GONE else View.VISIBLE
+           view.descriptionTextView.visibility = if(account.description.isBlank()) View.GONE else View.VISIBLE
            view.descriptionTextView.text = account.description
        }
     }

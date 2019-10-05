@@ -22,7 +22,8 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         showFragment(
             fragment = SignInFragment.newInstance(),
-            addInBackStack = false
+            addInBackStack = false,
+            shouldAddOrReplace = false
         )
     }
 }

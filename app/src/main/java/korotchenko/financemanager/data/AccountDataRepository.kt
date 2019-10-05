@@ -10,45 +10,37 @@ class AccountDataRepository @Inject constructor(
     private val accountsDbRequestWrapper: AccountsDBRequestWrapper
 ) {
 
-    private var inMemoryAccountsList: MutableList<AccountModel>? = null
+    private var inMemoryAccountsList: MutableList<AccountModel> = mutableListOf()
+
+    init {
+        inMemoryAccountsList.addAll(accountsDbRequestWrapper.getAllAccountFromDB())
+    }
 
     fun getAccountsList(): List<AccountModel> {
-        initAccountList()
-        return inMemoryAccountsList ?: emptyList()
+        return inMemoryAccountsList
     }
 
     fun saveAccount(model: AccountModel) {
-        initAccountList()
-        inMemoryAccountsList?.takeIf{ !it.contains(model) }?.let {
+        inMemoryAccountsList.takeIf{ !it.contains(model) }?.let {
             it.add(model)
             accountsDbRequestWrapper.saveAccount(model)
         }
     }
 
     fun saveAccounts(accounts: List<AccountModel>) {
-        initAccountList()
         accountsDbRequestWrapper.saveAccounts(accounts)
-        inMemoryAccountsList?.addAll(accounts)
+        inMemoryAccountsList.addAll(accounts)
     }
 
     fun deleteAccount(model: AccountModel) {
-        initAccountList()
-        inMemoryAccountsList?.remove(model)
+        inMemoryAccountsList.remove(model)
         accountsDbRequestWrapper.deleteAccount(model)
     }
 
     fun deleteAccountById(id: Long) {
-        initAccountList()
         accountsDbRequestWrapper.deleteAccountById(id)
-        inMemoryAccountsList?.firstOrNull { it.id == id }?.let {
-            inMemoryAccountsList?.remove(it)
-        }
-    }
-
-    private fun initAccountList() {
-        if(inMemoryAccountsList == null) {
-            inMemoryAccountsList = mutableListOf()
-            inMemoryAccountsList?.addAll(accountsDbRequestWrapper.getAllAccountFromDB())
+        inMemoryAccountsList.firstOrNull { it.id == id }?.let {
+            inMemoryAccountsList.remove(it)
         }
     }
 }

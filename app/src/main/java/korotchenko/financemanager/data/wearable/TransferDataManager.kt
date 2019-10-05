@@ -4,17 +4,19 @@ import android.util.Log
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import korotchenko.logic.models.AccountModel
+import korotchenko.logic.presenter.AccountModelMapper
 import javax.inject.Inject
 
 
 //TODO: Remove or update
 class TransferDataManager @Inject constructor(
-    private val dataClient: DataClient
+    private val dataClient: DataClient,
+    private val accountModelMapper: AccountModelMapper
 ) {
 
     fun sendAccounts(accounts: List<AccountModel>) {
         val dataMap = PutDataMapRequest.create(ACCOUNT_URL)
-        dataMap.dataMap.putDataMapArrayList(ACCOUNT_KEY, ArrayList(accounts.map { it.toDataMap() }))
+        dataMap.dataMap.putDataMapArrayList(ACCOUNT_KEY, ArrayList(accounts.map(accountModelMapper::toDataMap)))
         val request = dataMap.asPutDataRequest()
         request.setUrgent()
 

@@ -23,7 +23,7 @@ object AccountsTable: DBTable<AccountModel>("accounts") {
         return AccountModel(
             id = cursor.getLong(idColumn),
             name = cursor.getString(nameColumn),
-            description = cursor.getStringOrNull(descriptionColumn),
+            description = cursor.getString(descriptionColumn),
             balance = cursor.getDouble(balanceColumn)
         )
     }

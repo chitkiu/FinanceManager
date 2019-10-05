@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="DefaultTheme" parent="android:Theme.DeviceDefault">
-        <item name="defaultBackgroundColor">@android:color/black</item>
-        <item name="defaultTextColor">@android:color/white</item>
-    </style>
-</resources>

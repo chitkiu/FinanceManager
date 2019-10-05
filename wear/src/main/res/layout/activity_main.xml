@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@color/dark_grey"
     android:padding="@dimen/box_inset_layout_padding"
-    tools:context=".presentation.activity.MainActivity"
+    tools:context=".MainActivity"
     tools:deviceIds="wear">
 
     <FrameLayout
@@ -20,31 +20,17 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button"
+            <TextView
+                android:id="@+id/hello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:colorScheme="dark" />
-
-            <TextView
-                android:id="@+id/sign_in_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Successes log in"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/sign_in_credentials"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:text="@string/hello_world" />
 
             <Button
-                android:id="@+id/sign_out_button"
-                android:layout_width="match_parent"
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Out"
-                android:visibility="gone"/>
+                android:text="Button" />
         </LinearLayout>
 
     </FrameLayout>

@@ -42,11 +42,13 @@ class AccountsFragment : BaseFragment() {
         }
 
         accounts_list.layoutManager = LinearLayoutManager(context)
+        val accountList = accountDataRepository.getAccountsList()
         accountAdapter = AccountsAdapter(
             MONEY_SYMBOL,
             accountActionCommunicator,
-            accountDataRepository.getAccountsList()
+            accountList
         )
+        transferDataManager.sendAccounts(accountList)
         accounts_list.adapter = accountAdapter
     }
 
@@ -64,11 +66,16 @@ class AccountsFragment : BaseFragment() {
             }
             is AccountDelete -> {
                 accountDataRepository.deleteAccount(accountAction.accountModel)
-                accountAdapter.setDate(accountDataRepository.getAccountsList())
+                val accountList = accountDataRepository.getAccountsList()
+                accountAdapter.setDate(accountList)
+                transferDataManager.sendAccounts(accountList)
                 accountAdapter.notifyDataSetChanged()
             }
             is AccountCreate -> {
-                accountAdapter.setDate(accountDataRepository.getAccountsList())
+                accountDataRepository.saveAccount(accountAction.accountModel)
+                val accountList = accountDataRepository.getAccountsList()
+                accountAdapter.setDate(accountList)
+                transferDataManager.sendAccounts(accountList)
                 accountAdapter.notifyDataSetChanged()
             }
         }

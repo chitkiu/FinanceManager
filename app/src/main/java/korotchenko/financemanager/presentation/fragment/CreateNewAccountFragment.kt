@@ -3,7 +3,6 @@ package korotchenko.financemanager.presentation.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
-import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
@@ -13,9 +12,6 @@ import kotlinx.android.synthetic.main.fragment_create_new_account.*
 import javax.inject.Inject
 
 class CreateNewAccountFragment : BaseFragment() {
-
-    @Inject
-    lateinit var accountDataRepository: AccountDataRepository
 
     @Inject
     lateinit var accountActionCommunicator: AccountActionCommunicator
@@ -33,9 +29,8 @@ class CreateNewAccountFragment : BaseFragment() {
             if(!name_input_layout.error.isNullOrBlank()) {
                 return@setOnClickListener
             }
-            val accModel = buildModel()
-            accountDataRepository.saveAccount(accModel)
-            accountActionCommunicator.sendAction(AccountCreate(accModel))
+            val accountModel = buildModel()
+            accountActionCommunicator.sendAction(AccountCreate(accountModel))
             activity?.onBackPressed()
         }
 

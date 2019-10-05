@@ -1,22 +1,24 @@
 package korotchenko.financemanager
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.google.android.gms.wearable.DataClient
-import com.google.android.gms.wearable.DataEvent
-import com.google.android.gms.wearable.DataEventBuffer
-import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInResult
+import com.google.android.gms.common.api.GoogleApiClient
+import korotchenko.financemanager.presentation.activity.AccountsActivity
 import korotchenko.financemanager.presentation.base.BaseActivity
 import korotchenko.logic.models.CredentialModel
 import kotlinx.android.synthetic.main.activity_main.*
-import com.google.android.gms.wearable.DataMapItem
 
 
-
-class MainActivity : BaseActivity(), DataClient.OnDataChangedListener {
+class MainActivity : BaseActivity() {
 
     override val layoutID: Int = R.layout.activity_main
+
+    private var googleApiClient: GoogleApiClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,67 +33,102 @@ class MainActivity : BaseActivity(), DataClient.OnDataChangedListener {
 
     override fun onResume() {
         super.onResume()
-        Wearable.getDataClient(this).addListener(this)
+        initGoogleAuth()
+        if (googleApiClient != null && !googleApiClient!!.isConnected) {
+            googleApiClient?.connect()
+        }
     }
 
     override fun onPause() {
+        if (googleApiClient != null && googleApiClient!!.isConnected) {
+            googleApiClient?.disconnect()
+        }
         super.onPause()
-
-        Wearable.getDataClient(this).removeListener(this)
     }
 
-    override fun onDataChanged(dataEvents: DataEventBuffer) {
-        Log.d("MainActivity", "onDataChanged dataEvents $dataEvents")
-
-        dataEvents.forEach { event ->
-            when(event.type) {
-                DataEvent.TYPE_CHANGED -> handleAccountList(event)
-            }
-        }
-    }
-
-    private fun handleAccountList(event: DataEvent) {
-        val path = event.dataItem.uri.path
-        if(path == ACCOUNT_URL || path == "accounts") {
-            val dataMapItem = DataMapItem.fromDataItem(event.dataItem)
-            dataMapItem.dataMap.getDataMapArrayList(ACCOUNT_KEY).forEach {
-                Log.d("MainActivity", "handleAccountList data $it")
-            }
-        }
-    }
-
-    override fun onSignInError() {
+    private fun onSignInError() {
         sign_in_button.visibility = View.VISIBLE
         sign_in_text.visibility = View.GONE
         sign_in_credentials.visibility = View.GONE
         sign_out_button.visibility = View.GONE
     }
 
-    override fun onSignInSuccess(credential: CredentialModel) {
-        sign_in_button.visibility = View.GONE
-        sign_in_text.visibility = View.VISIBLE
-        sign_in_credentials.visibility = View.VISIBLE
-        sign_in_credentials.text = credential.toString()
-        sign_out_button.visibility = View.VISIBLE
+    private fun onSignInSuccess(credential: CredentialModel) {
+        val intent = Intent(this, AccountsActivity::class.java)
+        startActivity(intent)
     }
 
-    override fun onSignOutSuccess() {
+    private fun onSignOutSuccess() {
         sign_in_button.visibility = View.VISIBLE
         sign_in_text.visibility = View.GONE
         sign_in_credentials.visibility = View.GONE
         sign_out_button.visibility = View.GONE
     }
 
-    override fun onSignOutError() {
+    private fun onSignOutError() {
         sign_in_button.visibility = View.GONE
         sign_in_text.visibility = View.VISIBLE
         sign_in_credentials.visibility = View.VISIBLE
-//        sign_in_credentials.text = get.toString()
         sign_out_button.visibility = View.VISIBLE
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == GOOGLE_SIGN_IN) {
+            handleSignInResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data))
+        }
+    }
+
+    private fun signInByGoogle() {
+        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+    }
+
+    private fun signOutFromGoogle() {
+        val signOut = Auth.GoogleSignInApi.signOut(googleApiClient)
+        signOut.setResultCallback {
+            if(it.isSuccess) {
+                onSignOutSuccess()
+            } else {
+                onSignOutError()
+            }
+        }
+    }
+
+    private fun initGoogleAuth() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        googleApiClient = GoogleApiClient.Builder(this)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+            .build()
+
+        Auth.GoogleSignInApi
+            .silentSignIn(googleApiClient)
+            .setResultCallback(::handleSignInResult)
+    }
+
+    private fun handleSignInResult(result: GoogleSignInResult?) {
+        if(result == null || result.signInAccount == null) {
+            onSignInError()
+        } else {
+            result
+                .signInAccount
+                ?.let(::mapToCredentialModel)
+                ?.let(::onSignInSuccess)
+        }
+    }
+
+    private fun mapToCredentialModel(account: GoogleSignInAccount): CredentialModel {
+        return CredentialModel(
+            account.email ?: "",
+            account.givenName ?: "",
+            account.familyName ?: ""
+        )
     }
 
     companion object {
-        private const val ACCOUNT_URL = "/accounts"
-        private const val ACCOUNT_KEY = "all_account"
+        private const val GOOGLE_SIGN_IN: Int = 432
     }
 }

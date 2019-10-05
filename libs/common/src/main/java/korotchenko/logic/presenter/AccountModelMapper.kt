@@ -9,7 +9,7 @@ class AccountModelMapper {
         dataMap.putLong(AccountModel.ID_KEY, accountModel.id)
         dataMap.putString(AccountModel.NAME_KEY, accountModel.name)
         dataMap.putDouble(AccountModel.BALANCE_KEY, accountModel.balance)
-        if(!accountModel.description.isNullOrBlank()) {
+        if(!accountModel.description.isBlank()) {
             dataMap.putString(AccountModel.DESCRIPTION_KEY, accountModel.description)
         }
         return dataMap
@@ -23,7 +23,7 @@ class AccountModelMapper {
             return AccountModel(
                 dataMap.getLong(AccountModel.ID_KEY),
                 dataMap.getString(AccountModel.NAME_KEY),
-                dataMap.getString(AccountModel.DESCRIPTION_KEY, null),
+                dataMap.getString(AccountModel.DESCRIPTION_KEY, ""),
                 dataMap.getDouble(AccountModel.BALANCE_KEY)
             )
         }

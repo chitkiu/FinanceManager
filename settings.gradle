@@ -1,2 +1,2 @@
-include ':app', ':wear', ':logic'
+include ':app', ':wear', ':libs:common'
 rootProject.name='FinanceManager'

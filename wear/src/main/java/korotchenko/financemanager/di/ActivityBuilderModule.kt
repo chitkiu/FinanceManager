@@ -2,9 +2,10 @@ package korotchenko.financemanager.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import korotchenko.financemanager.presentation.activity.AccountDetailsActivity
-import korotchenko.financemanager.presentation.activity.AccountsActivity
 import korotchenko.financemanager.presentation.activity.MainActivity
+import korotchenko.financemanager.presentation.fragment.AccountDetailFragment
+import korotchenko.financemanager.presentation.fragment.AccountsFragment
+import korotchenko.financemanager.presentation.fragment.DashboardFragment
 
 @Module
 abstract class ActivityBuilderModule {
@@ -13,8 +14,12 @@ abstract class ActivityBuilderModule {
     abstract fun mainActivity(): MainActivity
 
     @ContributesAndroidInjector
-    abstract fun accountsActivity(): AccountsActivity
+    abstract fun dashboardFragment(): DashboardFragment
+
 
     @ContributesAndroidInjector
-    abstract fun accountDetailsActivity(): AccountDetailsActivity
+    abstract fun accountsFragment(): AccountsFragment
+
+    @ContributesAndroidInjector
+    abstract fun accountDetailFragment(): AccountDetailFragment
 }

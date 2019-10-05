@@ -17,10 +17,7 @@ class AccountDetailFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val accountModel = arguments?.getSerializable(ACCOUNT_KEY) as? AccountModel
         accountModel?.let(::loadAccountModel)
-        content_frame.addCallback(callback)
-
-        bottom_action_drawer.controller.peekDrawer()
-
+        top_drawer_content.addCallback(callback)
     }
 
     private fun loadAccountModel(accountModel: AccountModel) {

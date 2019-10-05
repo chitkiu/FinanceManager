@@ -1,2 +1,2 @@
-include ':app', ':wear', ':libs:common'
+include ':app', ':wear', ':libs:common', ':libs:tilesAPI'
 rootProject.name='FinanceManager'

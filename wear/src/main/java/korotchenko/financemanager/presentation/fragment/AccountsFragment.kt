@@ -1,8 +1,6 @@
 package korotchenko.financemanager.presentation.fragment
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.wear.widget.WearableLinearLayoutManager
 import com.google.android.gms.wearable.*
@@ -48,7 +46,6 @@ class AccountsFragment : BaseFragment(), DataClient.OnDataChangedListener {
     }
 
     override fun onResume() {
-        Log.e(TAG, "onResume")
         super.onResume()
         accountActionCommunicator
             .observeAction()
@@ -56,7 +53,6 @@ class AccountsFragment : BaseFragment(), DataClient.OnDataChangedListener {
     }
 
     override fun onPause() {
-        Log.e(TAG, "onPause")
         super.onPause()
         context?.let { nonNullContext ->
             Wearable.getDataClient(nonNullContext).removeListener(this)

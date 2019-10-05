@@ -9,6 +9,7 @@ import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.activity_account_details.*
 
+//TODO: Make inner view scrollable
 class AccountDetailFragment: BaseFragment() {
 
     override val layoutID: Int = R.layout.activity_account_details

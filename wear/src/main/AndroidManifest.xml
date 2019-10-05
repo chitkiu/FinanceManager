@@ -31,6 +31,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:label="@string/app_name"
+            android:icon="@mipmap/ic_launcher"
+            android:name=".presentation.tiles.MyTileProviderService"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="com.google.android.clockwork.ACTION_TILE_UPDATE_REQUEST" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -10,7 +10,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.activity.MainActivity
 import korotchenko.logic.models.CredentialModel
@@ -76,4 +81,57 @@ abstract class BaseFragment : Fragment() {
     ) {
         mainActivity?.showFragment(fragment, container, addInBackStack, shouldAddOrReplace)
     }
+
+    protected fun <T> Observable<T>.safeSubscribe(
+        onNext: (T) -> Unit
+    ) {
+        compositeDisposable += subscribe(onNext, ::handleError)
+    }
+
+    protected fun <T> Observable<T>.safeSubscribe(
+        onNext: (T) -> Unit,
+        onError: (Throwable) -> Unit = ::handleError
+    ) {
+        compositeDisposable += subscribe(onNext, onError)
+    }
+
+    protected fun <T> Single<T>.safeSubscribe(
+        onNext: (T) -> Unit
+    ) {
+        compositeDisposable += subscribe(onNext, ::handleError)
+    }
+
+    protected fun <T> Single<T>.safeSubscribe(
+        onNext: (T) -> Unit,
+        onError: (Throwable) -> Unit = ::handleError
+    ) {
+        compositeDisposable += subscribe(onNext, onError)
+    }
+
+    protected fun <T> Maybe<T>.safeSubscribe(
+        onNext: (T) -> Unit
+    ) {
+        compositeDisposable += subscribe(onNext, ::handleError)
+    }
+
+    protected fun <T> Maybe<T>.safeSubscribe(
+        onNext: (T) -> Unit,
+        onError: (Throwable) -> Unit = ::handleError
+    ) {
+        compositeDisposable += subscribe(onNext, onError)
+    }
+
+    protected fun <T> Completable.safeSubscribe(
+        onNext: () -> Unit
+    ) {
+        compositeDisposable += subscribe(onNext, ::handleError)
+    }
+
+    protected fun <T> Completable.safeSubscribe(
+        onNext: () -> Unit,
+        onError: (Throwable) -> Unit = ::handleError
+    ) {
+        compositeDisposable += subscribe(onNext, onError)
+    }
+
 }

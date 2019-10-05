@@ -19,7 +19,7 @@ class DashboardFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        compositeDisposable += Maybe.fromCallable {
+        Maybe.fromCallable {
             GoogleSignIn.getLastSignedInAccount(context)
         }
             .filter { it != null }
@@ -27,9 +27,9 @@ class DashboardFragment : BaseFragment() {
             .map { mapToCredentialModel(it) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ account ->
+            .safeSubscribe { account ->
                 userInfoTextView.text = "${account.email} \n ${account.firstName} ${account.lastName}"
-            }, ::handleError)
+            }
     }
 
     companion object {

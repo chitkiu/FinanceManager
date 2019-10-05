@@ -5,12 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import korotchenko.financemanager.R
+import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
+import korotchenko.financemanager.presentation.communicators.AccountSelect
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.account_view_item.view.*
 
-class AccountsAdapter(private val moneySymbol: String) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
-
+class AccountsAdapter(
+    private val moneySymbol: String,
+    private val accountActionCommunicator: AccountActionCommunicator,
     private var accountsList: List<AccountModel> = emptyList()
+) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,6 +41,9 @@ class AccountsAdapter(private val moneySymbol: String) : RecyclerView.Adapter<Ac
         fun bind(account: AccountModel) {
             view.nameTextView.text = account.name
             view.balanceTextView.text = String.format("%.2f %s", account.balance, moneySymbol)
+            view.setOnClickListener {
+                accountActionCommunicator.sendAction(AccountSelect(account))
+            }
         }
     }
 }

@@ -1,29 +1,53 @@
 package korotchenko.financemanager.presentation.activity
 
+import android.content.Intent
+import android.os.Bundle
 import androidx.wear.widget.WearableLinearLayoutManager
 import com.google.android.gms.wearable.*
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.adapters.AccountsAdapter
 import korotchenko.financemanager.presentation.base.BaseActivity
+import korotchenko.financemanager.presentation.communicators.AccountAction
+import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
+import korotchenko.financemanager.presentation.communicators.AccountSelect
 import korotchenko.logic.models.AccountModel
 import korotchenko.logic.presenter.AccountModelMapper
 import kotlinx.android.synthetic.main.activity_account.*
+import javax.inject.Inject
 
 class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
 
     override val layoutID: Int = R.layout.activity_account
 
+    @Inject
+    internal lateinit var accountActionCommunicator: AccountActionCommunicator
+
     private lateinit var accountsAdapter: AccountsAdapter
 
     private val accountModelMapper: AccountModelMapper = AccountModelMapper()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Wearable.getDataClient(this).apply {
+            addListener(this@AccountsActivity)
+            dataItems.addOnSuccessListener { it.forEach(::handleAccountList) }
+        }
+        accountsAdapter = AccountsAdapter(MONEY_SYMBOL, accountActionCommunicator)
+        accounts_list.apply {
+            layoutManager = WearableLinearLayoutManager(this@AccountsActivity)
+            adapter = accountsAdapter
+            isEdgeItemsCenteringEnabled = true
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        Wearable.getDataClient(this).addListener(this)
-        accounts_list.layoutManager = WearableLinearLayoutManager(this)
-        accountsAdapter = AccountsAdapter(MONEY_SYMBOL)
-        accounts_list.adapter = accountsAdapter
-        accounts_list.isEdgeItemsCenteringEnabled = true
+        accountActionCommunicator
+            .observeAction()
+            .safeSubscribe(::handleAccountAction)
     }
 
     override fun onPause() {
@@ -39,22 +63,43 @@ class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
         }
     }
 
+    private fun handleAccountAction(action: AccountAction) {
+        when(action) {
+            is AccountSelect -> openAccountDetail(action.accountModel)
+        }
+    }
+
+    private fun openAccountDetail(accountModel: AccountModel) {
+        val intent = Intent(this, AccountDetailsActivity::class.java)
+        intent.putExtra(AccountDetailsActivity.ACCOUNT_KEY, accountModel)
+        startActivity(intent)
+    }
+
     private fun handleAccountList(event: DataEvent) {
-        val path = event.dataItem.uri.path
+        handleAccountList(event.dataItem)
+    }
+
+    private fun handleAccountList(dataItem: DataItem) {
+        val path = dataItem.uri.path
         if(path == ACCOUNT_URL) {
-            val dataMapItem = DataMapItem.fromDataItem(event.dataItem)
-            dataMapItem.dataMap
-                .getDataMapArrayList(ACCOUNT_KEY)
-                .map(accountModelMapper::fromDataMap)
-                .takeIf {
+            Single.fromCallable {
+                DataMapItem
+                    .fromDataItem(dataItem)
+                    .dataMap
+                    .getDataMapArrayList(ACCOUNT_KEY)
+            }
+                .map { it.map(accountModelMapper::fromDataMap) }
+                .filter {
                     it.forEach { account ->
                         if (account == null)
-                            return@takeIf false
+                            return@filter false
                     }
-                    return@takeIf true
+                    return@filter true
                 }
-                ?.map { it as AccountModel }
-                ?.let(accountsAdapter::setDate)
+                .map { list -> list.map { it as AccountModel } }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .safeSubscribe(accountsAdapter::setDate)
         }
     }
 

@@ -1,4 +1,4 @@
-package korotchenko.financemanager
+package korotchenko.financemanager.presentation.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.GoogleApiClient
-import korotchenko.financemanager.presentation.activity.AccountsActivity
+import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseActivity
 import korotchenko.logic.models.CredentialModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,15 +34,11 @@ class MainActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         initGoogleAuth()
-        if (googleApiClient != null && !googleApiClient!!.isConnected) {
-            googleApiClient?.connect()
-        }
+        googleApiClient?.connect()
     }
 
     override fun onPause() {
-        if (googleApiClient != null && googleApiClient!!.isConnected) {
-            googleApiClient?.disconnect()
-        }
+        googleApiClient?.disconnect()
         super.onPause()
     }
 
@@ -56,6 +52,8 @@ class MainActivity : BaseActivity() {
     private fun onSignInSuccess(credential: CredentialModel) {
         val intent = Intent(this, AccountsActivity::class.java)
         startActivity(intent)
+        googleApiClient?.disconnect()
+        finish()
     }
 
     private fun onSignOutSuccess() {
@@ -82,18 +80,22 @@ class MainActivity : BaseActivity() {
 
     private fun signInByGoogle() {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+        startActivityForResult(signInIntent,
+            GOOGLE_SIGN_IN
+        )
     }
 
     private fun signOutFromGoogle() {
-        val signOut = Auth.GoogleSignInApi.signOut(googleApiClient)
-        signOut.setResultCallback {
-            if(it.isSuccess) {
-                onSignOutSuccess()
-            } else {
-                onSignOutError()
+        Auth
+            .GoogleSignInApi
+            .signOut(googleApiClient)
+            .setResultCallback {
+                if (it.isSuccess) {
+                    onSignOutSuccess()
+                } else {
+                    onSignOutError()
+                }
             }
-        }
     }
 
     private fun initGoogleAuth() {

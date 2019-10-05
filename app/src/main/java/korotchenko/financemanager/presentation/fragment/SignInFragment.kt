@@ -33,7 +33,7 @@ class SignInFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        compositeDisposable += Maybe.fromCallable {
+        Maybe.fromCallable {
             GoogleSignIn.getLastSignedInAccount(context)
         }
             .filter { it != null }
@@ -41,9 +41,9 @@ class SignInFragment : BaseFragment() {
             .map { mapToCredentialModel(it)}
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ account ->
+            .safeSubscribe {
                 onSignInSuccess()
-            }, ::handleError)
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

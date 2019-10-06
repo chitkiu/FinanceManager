@@ -13,7 +13,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme">
-        <activity android:name=".presentation.activity.AccountDetailsActivity"></activity>
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -22,9 +21,9 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
-        <!--
+
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,14 +31,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        -->
-        <activity android:name=".presentation.activity.AccountsActivity">
+        <service
+            android:label="@string/app_name"
+            android:icon="@mipmap/ic_launcher"
+            android:name=".presentation.tiles.MyTileProviderService"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"
+            android:exported="true"
+            >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="com.google.android.clockwork.ACTION_TILE_UPDATE_REQUEST" />
             </intent-filter>
-        </activity>
+        </service>
     </application>
 
 </manifest>

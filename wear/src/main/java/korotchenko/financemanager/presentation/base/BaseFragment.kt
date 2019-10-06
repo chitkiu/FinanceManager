@@ -1,12 +1,12 @@
 package korotchenko.financemanager.presentation.base
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.wear.ambient.AmbientModeSupport
-import dagger.android.AndroidInjection
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -14,33 +14,33 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import korotchenko.financemanager.R
+import korotchenko.financemanager.presentation.activity.MainActivity
 
+abstract class BaseFragment : Fragment() {
 
-abstract class BaseActivity : AppCompatActivity(),
-    AmbientModeSupport.AmbientCallbackProvider {
+    protected val mainActivity: MainActivity?
+        get() {
+            return activity as? MainActivity
+        }
 
     abstract val layoutID: Int
 
-    protected val TAG: String = javaClass.simpleName
+    val TAG: String = javaClass.simpleName
 
     protected lateinit var compositeDisposable: CompositeDisposable
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState, persistentState)
-        setContentView(layoutID)
-        AmbientModeSupport.attach(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
+        AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(layoutID)
-        AmbientModeSupport.attach(this)
     }
 
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = object :
-        AmbientModeSupport.AmbientCallback() {}
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(layoutID, container, false)
+    }
 
     override fun onResume() {
         super.onResume()
@@ -52,14 +52,22 @@ abstract class BaseActivity : AppCompatActivity(),
         super.onPause()
     }
 
-    override fun onBackPressed() = if(supportFragmentManager.backStackEntryCount == 0) {
-        super.onBackPressed()
-    } else {
-        supportFragmentManager.popBackStack()
-    }
-
     protected fun handleError(e: Throwable) {
         Log.e(TAG, e.localizedMessage)
+    }
+
+    protected fun showFragment(
+        fragment: BaseFragment,
+        container: Int = R.id.content_frame,
+        blockFragmentRepeat: Boolean = false,
+        addInBackStack: Boolean = true,
+        shouldAddOrReplace: Boolean = true
+    ) {
+        mainActivity?.showFragment(fragment, container, addInBackStack, shouldAddOrReplace)
+    }
+
+    protected fun hideFragment(fragment: BaseFragment) {
+        mainActivity?.hideFragment(fragment)
     }
 
     protected fun <T> Observable<T>.safeSubscribe(
@@ -112,37 +120,5 @@ abstract class BaseActivity : AppCompatActivity(),
         onError: (Throwable) -> Unit = ::handleError
     ) {
         compositeDisposable += subscribe(onNext, onError)
-    }
-
-    fun showFragment(
-        fragment: BaseFragment,
-        container: Int = R.id.content_frame,
-        blockFragmentRepeat: Boolean = false,
-        addInBackStack: Boolean = true,
-        shouldAddOrReplace: Boolean = true
-    ) {
-        if(blockFragmentRepeat) {
-            val oldFragment = supportFragmentManager.fragments.lastOrNull() as? BaseFragment
-            if(oldFragment?.TAG == fragment.TAG) {
-                return
-            }
-        }
-        val t = supportFragmentManager.beginTransaction()
-        if (shouldAddOrReplace) {
-            t.add(container, fragment, fragment.TAG)
-        } else {
-            t.replace(container, fragment, fragment.TAG)
-        }
-        if (addInBackStack) {
-            t.addToBackStack(fragment.TAG)
-        }
-        t.commit()
-    }
-
-    fun hideFragment(fragment: BaseFragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .remove(fragment)
-            .commitNow()
     }
 }

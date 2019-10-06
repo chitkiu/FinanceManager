@@ -1,7 +1,7 @@
-package korotchenko.financemanager.presentation.activity
+package korotchenko.financemanager.presentation.fragment
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.wear.widget.WearableLinearLayoutManager
 import com.google.android.gms.wearable.*
 import io.reactivex.Single
@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.adapters.AccountsAdapter
-import korotchenko.financemanager.presentation.base.BaseActivity
+import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.presentation.communicators.AccountAction
 import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
 import korotchenko.financemanager.presentation.communicators.AccountSelect
@@ -18,7 +18,7 @@ import korotchenko.logic.presenter.AccountModelMapper
 import kotlinx.android.synthetic.main.activity_account.*
 import javax.inject.Inject
 
-class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
+class AccountsFragment : BaseFragment(), DataClient.OnDataChangedListener {
 
     override val layoutID: Int = R.layout.activity_account
 
@@ -29,17 +29,19 @@ class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
 
     private val accountModelMapper: AccountModelMapper = AccountModelMapper()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Wearable.getDataClient(this).apply {
-            addListener(this@AccountsActivity)
-            dataItems.addOnSuccessListener { it.forEach(::handleAccountList) }
-        }
-        accountsAdapter = AccountsAdapter(MONEY_SYMBOL, accountActionCommunicator)
-        accounts_list.apply {
-            layoutManager = WearableLinearLayoutManager(this@AccountsActivity)
-            adapter = accountsAdapter
-            isEdgeItemsCenteringEnabled = true
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        context?.let { nonNullContext ->
+            Wearable.getDataClient(nonNullContext).apply {
+                addListener(this@AccountsFragment)
+                dataItems.addOnSuccessListener { it.forEach(::handleAccountList) }
+            }
+            accountsAdapter = AccountsAdapter(MONEY_SYMBOL, accountActionCommunicator)
+            accounts_list.apply {
+                layoutManager = WearableLinearLayoutManager(nonNullContext)
+                adapter = accountsAdapter
+                isEdgeItemsCenteringEnabled = true
+            }
         }
     }
 
@@ -52,7 +54,9 @@ class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
 
     override fun onPause() {
         super.onPause()
-        Wearable.getDataClient(this).removeListener(this)
+        context?.let { nonNullContext ->
+            Wearable.getDataClient(nonNullContext).removeListener(this)
+        }
     }
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
@@ -70,9 +74,11 @@ class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
     }
 
     private fun openAccountDetail(accountModel: AccountModel) {
-        val intent = Intent(this, AccountDetailsActivity::class.java)
-        intent.putExtra(AccountDetailsActivity.ACCOUNT_KEY, accountModel)
-        startActivity(intent)
+        showFragment(
+            fragment = AccountDetailFragment.newInstance(accountModel),
+            addInBackStack = true,
+            shouldAddOrReplace = true
+        )
     }
 
     private fun handleAccountList(event: DataEvent) {
@@ -107,5 +113,7 @@ class AccountsActivity : BaseActivity(), DataClient.OnDataChangedListener  {
         private const val MONEY_SYMBOL = "₴"
         private const val ACCOUNT_URL = "/accounts"
         private const val ACCOUNT_KEY = "all_account"
+
+        fun newInstance(): AccountsFragment = AccountsFragment()
     }
 }

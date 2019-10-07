@@ -6,11 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.data.ExpenseDataRepository
+import korotchenko.financemanager.presentation.base.BaseView
 import korotchenko.financemanager.presentation.fragment.adapters.ExpensesAdapter
+import korotchenko.financemanager.presentation.presenters.ExpensesPresenter
 import kotlinx.android.synthetic.main.fragment_expenses.*
 import javax.inject.Inject
 
-class ExpensesFragment : BaseFragment() {
+interface ExpensesView : BaseView {
+
+}
+
+class ExpensesFragment : BaseFragment<ExpensesPresenter>(), ExpensesView {
 
     @Inject
     lateinit var expenseDataRepository: ExpenseDataRepository
@@ -21,9 +27,7 @@ class ExpensesFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fab_add_expense.setOnClickListener {
-            showFragment(
-                fragment = CreateNewAccountFragment.newInstance()
-            )
+
         }
 
         expenses_list.layoutManager = LinearLayoutManager(context)

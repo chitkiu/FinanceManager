@@ -19,27 +19,25 @@ import io.reactivex.rxkotlin.plusAssign
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.activity.MainActivity
 import korotchenko.logic.models.CredentialModel
+import javax.inject.Inject
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment<P : BasePresenter<out BaseView>> : BaseMVPFragment<P>(), BaseView {
+
+    @Inject
+    lateinit var presenter: P
+
+    override fun getViewPresenter(): P = presenter
+
+    val TAG: String = javaClass.simpleName
 
     protected val mainActivity: MainActivity?
         get() {
             return activity as? MainActivity
         }
 
-    protected val googleSignInClient: GoogleSignInClient?
-        get() = mainActivity?.googleSignInClient
-
     abstract val layoutID: Int
 
-    val TAG: String = javaClass.simpleName
-
     protected lateinit var compositeDisposable: CompositeDisposable
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,12 +72,13 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected fun showFragment(
-        fragment: BaseFragment,
+        fragment: BaseFragment<out BasePresenter<out BaseView>>,
         container: Int = R.id.fragment_container,
+        blockFragmentRepeat: Boolean = false,
         addInBackStack: Boolean = true,
         shouldAddOrReplace: Boolean = true
     ) {
-        mainActivity?.showFragment(fragment, container, addInBackStack, shouldAddOrReplace)
+        mainActivity?.showFragment(fragment, container, blockFragmentRepeat, addInBackStack, shouldAddOrReplace)
     }
 
     protected fun <T> Observable<T>.safeSubscribe(

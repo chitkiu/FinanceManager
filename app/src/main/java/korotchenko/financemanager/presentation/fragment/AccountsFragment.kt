@@ -1,29 +1,27 @@
 package korotchenko.financemanager.presentation.fragment
 
-
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.rxkotlin.plusAssign
-import korotchenko.financemanager.data.AccountDataRepository
 import korotchenko.financemanager.R
-import korotchenko.financemanager.data.wearable.TransferDataManager
 import korotchenko.financemanager.presentation.base.BaseFragment
-import korotchenko.financemanager.presentation.communicators.*
+import korotchenko.financemanager.presentation.base.BaseView
+import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
 import korotchenko.financemanager.presentation.fragment.adapters.AccountsAdapter
+import korotchenko.financemanager.presentation.presenters.AccountsPresenter
+import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_accounts.*
 import javax.inject.Inject
 
-class AccountsFragment : BaseFragment() {
+interface AccountsView : BaseView {
+    fun showAccounts(accountsList: List<AccountModel>)
+    fun selectAccount(accountModel: AccountModel)
+}
+
+class AccountsFragment : BaseFragment<AccountsPresenter>(), AccountsView {
 
     private lateinit var accountAdapter: AccountsAdapter
-
-    @Inject
-    lateinit var accountDataRepository: AccountDataRepository
-
-    @Inject
-    lateinit var transferDataManager: TransferDataManager
 
     @Inject
     lateinit var accountActionCommunicator: AccountActionCommunicator
@@ -36,49 +34,26 @@ class AccountsFragment : BaseFragment() {
         fab_add_account.setOnClickListener {
             showFragment(
                 fragment = CreateNewAccountFragment.newInstance(),
+                blockFragmentRepeat = true,
                 addInBackStack = true,
                 shouldAddOrReplace = true
             )
         }
 
         accounts_list.layoutManager = LinearLayoutManager(context)
-        val accountList = accountDataRepository.getAccountsList()
         accountAdapter = AccountsAdapter(
             MONEY_SYMBOL,
-            accountActionCommunicator,
-            accountList
+            accountActionCommunicator
         )
-        transferDataManager.sendAccounts(accountList)
         accounts_list.adapter = accountAdapter
     }
 
-    override fun onResume() {
-        super.onResume()
-        compositeDisposable += accountActionCommunicator
-            .observeAction()
-            .subscribe(::handleAccountUpdate, ::handleError)
+    override fun showAccounts(accountsList: List<AccountModel>) {
+        accountAdapter.setDate(accountsList)
     }
 
-    private fun handleAccountUpdate(accountAction: AccountAction) {
-        when(accountAction) {
-            is AccountSelect -> {
-                Toast.makeText(context, "Select ${accountAction.accountModel.name}!", Toast.LENGTH_LONG).show()
-            }
-            is AccountDelete -> {
-                accountDataRepository.deleteAccount(accountAction.accountModel)
-                val accountList = accountDataRepository.getAccountsList()
-                accountAdapter.setDate(accountList)
-                transferDataManager.sendAccounts(accountList)
-                accountAdapter.notifyDataSetChanged()
-            }
-            is AccountCreate -> {
-                accountDataRepository.saveAccount(accountAction.accountModel)
-                val accountList = accountDataRepository.getAccountsList()
-                accountAdapter.setDate(accountList)
-                transferDataManager.sendAccounts(accountList)
-                accountAdapter.notifyDataSetChanged()
-            }
-        }
+    override fun selectAccount(accountModel: AccountModel) {
+        Toast.makeText(context, "Select ${accountModel.name}!", Toast.LENGTH_LONG).show()
     }
 
     companion object {

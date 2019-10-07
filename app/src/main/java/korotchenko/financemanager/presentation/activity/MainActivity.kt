@@ -10,13 +10,6 @@ import korotchenko.financemanager.presentation.fragment.SignInFragment
 
 class MainActivity : BaseActivity() {
 
-    private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestEmail()
-        .build()
-
-    val googleSignInClient: GoogleSignInClient?
-        get() = GoogleSignIn.getClient(this, gso)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

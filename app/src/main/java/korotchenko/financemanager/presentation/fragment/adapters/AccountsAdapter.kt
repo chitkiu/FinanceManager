@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.account_view_item.view.*
 class AccountsAdapter(
     private val moneySymbol: String,
     private val accountActionCommunicator: AccountActionCommunicator,
-    private var accountsList: List<AccountModel>
+    private var accountsList: List<AccountModel> = emptyList()
 ) : RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {

@@ -6,9 +6,16 @@ import android.util.Log
 import android.view.View
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
+import korotchenko.financemanager.presentation.base.BasePresenter
+import korotchenko.financemanager.presentation.base.BaseView
+import korotchenko.financemanager.presentation.presenters.MainPresenter
 import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragment : BaseFragment() {
+interface MainView: BaseView {
+
+}
+
+class MainFragment : BaseFragment<MainPresenter>(), MainView {
 
     override val layoutID: Int = R.layout.fragment_main
 
@@ -19,11 +26,9 @@ class MainFragment : BaseFragment() {
             return@setOnNavigationItemSelectedListener true
         }
         nav_view.selectedItemId = savedInstanceState?.getInt(SELECTED_ITEM_ID_KEY, R.id.navigation_dashboard) ?: R.id.navigation_dashboard
-        Log.e(TAG, "MainFragment selectedItemId ${nav_view.selectedItemId}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.e(TAG, "MainFragment onSaveInstanceState selectedItemId ${nav_view.selectedItemId}")
         super.onSaveInstanceState(outState)
         outState.putInt(SELECTED_ITEM_ID_KEY, nav_view.selectedItemId)
     }
@@ -53,10 +58,11 @@ class MainFragment : BaseFragment() {
         }
     }
 
-    private fun showFragment(fragment: BaseFragment) {
+    private fun showFragment(fragment: BaseFragment<out BasePresenter<out BaseView>>) {
         showFragment(
             fragment = fragment,
             container = R.id.main_fragment_container,
+            blockFragmentRepeat = true,
             addInBackStack = false,
             shouldAddOrReplace = false
         )

@@ -1,5 +1,9 @@
 package korotchenko.financemanager.data
 
+import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.data.db.AccountsDBRequestWrapper
 import korotchenko.logic.models.AccountModel
 import javax.inject.Inject
@@ -10,37 +14,36 @@ class AccountDataRepository @Inject constructor(
     private val accountsDbRequestWrapper: AccountsDBRequestWrapper
 ) {
 
-    private var inMemoryAccountsList: MutableList<AccountModel> = mutableListOf()
-
-    init {
-        inMemoryAccountsList.addAll(accountsDbRequestWrapper.getAllAccountFromDB())
+    fun getAccountsList(): Single<List<AccountModel>> = Single.fromCallable {
+        accountsDbRequestWrapper.getAllAccountFromDB()
     }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
-    fun getAccountsList(): List<AccountModel> {
-        return inMemoryAccountsList
+    fun saveAccount(model: AccountModel): Completable = Completable.fromRunnable {
+        accountsDbRequestWrapper.saveAccount(model)
     }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
-    fun saveAccount(model: AccountModel) {
-        inMemoryAccountsList.takeIf{ !it.contains(model) }?.let {
-            it.add(model)
-            accountsDbRequestWrapper.saveAccount(model)
-        }
-    }
-
-    fun saveAccounts(accounts: List<AccountModel>) {
+    fun saveAccounts(accounts: List<AccountModel>): Completable = Completable.fromRunnable {
         accountsDbRequestWrapper.saveAccounts(accounts)
-        inMemoryAccountsList.addAll(accounts)
     }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
-    fun deleteAccount(model: AccountModel) {
-        inMemoryAccountsList.remove(model)
+
+    fun deleteAccount(model: AccountModel): Completable = Completable.fromRunnable {
         accountsDbRequestWrapper.deleteAccount(model)
     }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
-    fun deleteAccountById(id: Long) {
+
+    fun deleteAccountById(id: Long): Completable = Completable.fromRunnable {
         accountsDbRequestWrapper.deleteAccountById(id)
-        inMemoryAccountsList.firstOrNull { it.id == id }?.let {
-            inMemoryAccountsList.remove(it)
-        }
     }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+
 }

@@ -1,35 +1,23 @@
 package korotchenko.financemanager.presentation.fragment
 
 
-import android.os.Bundle
-import android.view.View
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
+import korotchenko.financemanager.presentation.base.BaseView
+import korotchenko.financemanager.presentation.presenters.DashboardPresenter
+import korotchenko.logic.models.CredentialModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
-class DashboardFragment : BaseFragment() {
+interface DashboardView : BaseView{
+    fun showCurrentUserAccount(credentialModel: CredentialModel)
+}
+
+class DashboardFragment : BaseFragment<DashboardPresenter>(), DashboardView {
 
     override val layoutID: Int = R.layout.fragment_dashboard
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Maybe.fromCallable {
-            GoogleSignIn.getLastSignedInAccount(context)
-        }
-            .filter { it != null }
-            .map { it as GoogleSignInAccount }
-            .map { mapToCredentialModel(it) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .safeSubscribe { account ->
-                userInfoTextView.text = "${account.email} \n ${account.firstName} ${account.lastName}"
-            }
+    override fun showCurrentUserAccount(credentialModel: CredentialModel) {
+        userInfoTextView.text = "${credentialModel.email} \n ${credentialModel.firstName} ${credentialModel.lastName}"
     }
 
     companion object {

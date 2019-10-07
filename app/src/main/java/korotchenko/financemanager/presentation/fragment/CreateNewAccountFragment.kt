@@ -2,19 +2,21 @@ package korotchenko.financemanager.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.widget.addTextChangedListener
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
-import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
-import korotchenko.financemanager.presentation.communicators.AccountCreate
+import korotchenko.financemanager.presentation.base.BaseView
+import korotchenko.financemanager.presentation.presenters.CreateNewAccountPresenter
 import korotchenko.logic.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_create_new_account.*
-import javax.inject.Inject
 
-class CreateNewAccountFragment : BaseFragment() {
+interface CreateNewAccountView : BaseView {
+    fun showBalanceError(text: CharSequence?)
+    fun showNameError(text: CharSequence?)
 
-    @Inject
-    lateinit var accountActionCommunicator: AccountActionCommunicator
+    fun goBackToMainScreen()
+}
+
+class CreateNewAccountFragment : BaseFragment<CreateNewAccountPresenter>(), CreateNewAccountView {
 
     override val layoutID: Int = R.layout.fragment_create_new_account
 
@@ -22,32 +24,20 @@ class CreateNewAccountFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fab_save_account.setOnClickListener {
-            handleUpdate(buildModel())
-            if(!start_balance_input_layout.error.isNullOrBlank()) {
-                return@setOnClickListener
-            }
-            if(!name_input_layout.error.isNullOrBlank()) {
-                return@setOnClickListener
-            }
-            val accountModel = buildModel()
-            accountActionCommunicator.sendAction(AccountCreate(accountModel))
-            activity?.onBackPressed()
+            presenter.createNewAccount(buildModel())
         }
-
-        start_balance_edittext.addTextChangedListener(afterTextChanged = {
-            handleUpdate(buildModel())
-        })
-        name_edittext.addTextChangedListener(afterTextChanged = {
-            handleUpdate(buildModel())
-        })
     }
 
-    private fun handleUpdate(model: AccountModel) {
-        start_balance_input_layout.error = null
-        name_input_layout.error = null
-        when {
-            model.name.isBlank() -> name_input_layout.error = "Cannot be blank!"
-        }
+    override fun goBackToMainScreen() {
+        activity?.onBackPressed()
+    }
+
+    override fun showBalanceError(text: CharSequence?) {
+        start_balance_input_layout.error = text
+    }
+
+    override fun showNameError(text: CharSequence?) {
+        name_input_layout.error = text
     }
 
     private fun buildModel(): AccountModel {
@@ -55,11 +45,12 @@ class CreateNewAccountFragment : BaseFragment() {
             id = System.currentTimeMillis(),
             name = name_edittext.text.toString(),
             description = description_edittext.text.toString(),
-            balance = start_balance_edittext.text.toString().toDoubleOrNull() ?: 0.0
+            balance = start_balance_edittext.text.toString().toDoubleOrNull() ?: EMPTY_BALANCE_VALUE
         )
     }
 
     companion object {
+        val EMPTY_BALANCE_VALUE = Double.MIN_VALUE
         fun newInstance() = CreateNewAccountFragment()
     }
 }

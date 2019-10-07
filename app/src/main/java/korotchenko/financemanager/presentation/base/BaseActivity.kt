@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import dagger.android.AndroidInjection
 import korotchenko.financemanager.R
 
-abstract class BaseActivity : AppCompatActivity(){
+abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -19,11 +19,18 @@ abstract class BaseActivity : AppCompatActivity(){
         }
 
     fun showFragment(
-        fragment: BaseFragment,
+        fragment: BaseFragment<out BasePresenter<out BaseView>>,
         container: Int = R.id.fragment_container,
+        blockFragmentRepeat: Boolean = false,
         addInBackStack: Boolean = true,
         shouldAddOrReplace: Boolean = true
     ) {
+        if(blockFragmentRepeat) {
+            val oldFragment = supportFragmentManager.fragments.lastOrNull() as? BaseFragment<*>
+            if(oldFragment?.TAG == fragment.TAG) {
+                return
+            }
+        }
         val t = supportFragmentManager.beginTransaction()
         if (shouldAddOrReplace) {
             t.add(container, fragment)

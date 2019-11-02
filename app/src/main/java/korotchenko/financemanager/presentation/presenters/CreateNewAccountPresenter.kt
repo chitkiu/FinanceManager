@@ -5,7 +5,7 @@ import korotchenko.financemanager.presentation.communicators.AccountActionCommun
 import korotchenko.financemanager.presentation.communicators.AccountCreate
 import korotchenko.financemanager.presentation.fragment.CreateNewAccountFragment
 import korotchenko.financemanager.presentation.fragment.CreateNewAccountView
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import javax.inject.Inject
 
 class CreateNewAccountPresenter @Inject constructor(

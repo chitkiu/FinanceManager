@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.R
-import korotchenko.logic.presenter.AccountModelMapper
+import korotchenko.common.presenter.AccountModelMapper
 
 //TODO: Add DI, Update desing
 class MyTileProviderService : TileProviderService(), DataClient.OnDataChangedListener {

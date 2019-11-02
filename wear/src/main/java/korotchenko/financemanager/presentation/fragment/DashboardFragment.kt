@@ -8,7 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
-import korotchenko.logic.presenter.AccountModelMapper
+import korotchenko.common.presenter.AccountModelMapper
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashboardFragment: BaseFragment(), DataClient.OnDataChangedListener {

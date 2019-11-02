@@ -1,7 +1,7 @@
-package korotchenko.logic.presenter
+package korotchenko.common.presenter
 
 import com.google.android.gms.wearable.DataMap
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 
 class AccountModelMapper {
     fun toDataMap(accountModel: AccountModel): DataMap {

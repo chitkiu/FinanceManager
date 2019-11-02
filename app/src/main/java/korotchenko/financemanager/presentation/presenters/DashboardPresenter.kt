@@ -8,8 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.presentation.base.BasePresenter
 import korotchenko.financemanager.presentation.fragment.DashboardView
-import korotchenko.logic.models.CredentialModel
-import kotlinx.android.synthetic.main.fragment_dashboard.*
+import korotchenko.common.models.CredentialModel
 import javax.inject.Inject
 
 class DashboardPresenter @Inject constructor(

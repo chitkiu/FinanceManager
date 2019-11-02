@@ -1,4 +1,4 @@
-package korotchenko.logic.models
+package korotchenko.common.models
 
 import java.io.Serializable
 

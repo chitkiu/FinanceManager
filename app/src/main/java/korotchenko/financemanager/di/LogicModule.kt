@@ -2,7 +2,7 @@ package korotchenko.financemanager.di
 
 import dagger.Module
 import dagger.Provides
-import korotchenko.logic.presenter.AccountModelMapper
+import korotchenko.common.presenter.AccountModelMapper
 
 @Module
 class LogicModule {

@@ -5,20 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.activity.MainActivity
-import korotchenko.logic.models.CredentialModel
+import korotchenko.common.models.CredentialModel
 import javax.inject.Inject
 
 abstract class BaseFragment<P : BasePresenter<out BaseView>> : BaseMVPFragment<P>(), BaseView {

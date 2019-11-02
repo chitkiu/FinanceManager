@@ -2,15 +2,9 @@ package korotchenko.financemanager.data.db
 
 import android.content.ContentValues
 import android.database.Cursor
-import androidx.core.database.getStringOrNull
-import korotchenko.logic.models.AccountModel
-
-sealed class DBTable<T>(
-    val tableName: String
-) {
-    abstract fun loadFromCursor(cursor: Cursor): T?
-    abstract fun getContentValues(obj: T): ContentValues
-}
+import korotchenko.common.data.db.DBTable
+import korotchenko.common.models.AccountModel
+import korotchenko.common.models.TransactionModel
 
 object AccountsTable: DBTable<AccountModel>("accounts") {
 
@@ -36,5 +30,33 @@ object AccountsTable: DBTable<AccountModel>("accounts") {
         contentValues.put(AccountModel.BALANCE_KEY, obj.balance)
         return contentValues
     }
+}
 
+object TransactionsTable: DBTable<TransactionModel>("transactions") {
+
+    override fun loadFromCursor(cursor: Cursor): TransactionModel? {
+        val idColumn = cursor.getColumnIndex(TransactionModel.ID_KEY)
+        val descriptionColumn = cursor.getColumnIndex(TransactionModel.DESCRIPTION_KEY)
+        val sumColumn = cursor.getColumnIndex(TransactionModel.SUM_KEY)
+        val categoryIdColumn = cursor.getColumnIndex(TransactionModel.CATEGORY_ID_KEY)
+        val dateColumn = cursor.getColumnIndex(TransactionModel.DATE_KEY)
+
+        return TransactionModel(
+            id = cursor.getLong(idColumn),
+            description = cursor.getString(descriptionColumn),
+            sum = cursor.getDouble(sumColumn),
+            categoryId = cursor.getLong(categoryIdColumn),
+            date = cursor.getString(dateColumn)
+        )
+    }
+
+    override fun getContentValues(obj: TransactionModel): ContentValues {
+        val contentValues = ContentValues()
+        contentValues.put(TransactionModel.ID_KEY, obj.id)
+        contentValues.put(TransactionModel.DESCRIPTION_KEY, obj.description)
+        contentValues.put(TransactionModel.SUM_KEY, obj.sum)
+        contentValues.put(TransactionModel.CATEGORY_ID_KEY, obj.categoryId)
+        contentValues.put(TransactionModel.DATE_KEY, obj.date)
+        return contentValues
+    }
 }

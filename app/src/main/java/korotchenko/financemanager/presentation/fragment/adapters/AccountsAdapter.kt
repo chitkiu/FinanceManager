@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
 import korotchenko.financemanager.presentation.communicators.AccountDelete
 import korotchenko.financemanager.presentation.communicators.AccountSelect
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import kotlinx.android.synthetic.main.account_view_item.view.*
 
 

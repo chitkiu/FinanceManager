@@ -6,7 +6,7 @@ import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.presentation.base.BaseView
 import korotchenko.financemanager.presentation.presenters.CreateNewAccountPresenter
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_create_new_account.*
 
 interface CreateNewAccountView : BaseView {

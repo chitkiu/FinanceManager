@@ -3,8 +3,8 @@ package korotchenko.financemanager.data.wearable
 import android.util.Log
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.PutDataMapRequest
-import korotchenko.logic.models.AccountModel
-import korotchenko.logic.presenter.AccountModelMapper
+import korotchenko.common.models.AccountModel
+import korotchenko.common.presenter.AccountModelMapper
 import javax.inject.Inject
 
 

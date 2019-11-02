@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "687613347118",
+    "firebase_url": "https://my-project-1568185008870.firebaseio.com",
+    "project_id": "my-project-1568185008870",
+    "storage_bucket": "my-project-1568185008870.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687613347118:android:b3905d7a846f6a90ade6bf",
+        "android_client_info": {
+          "package_name": "korotchenko.financemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687613347118-0omkb52ja47lo3k4jcvfi1al3hg9d98n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "korotchenko.financemanager",
+            "certificate_hash": "5e7d4434deea1e03ce29af246c962e63266ede0e"
+          }
+        },
+        {
+          "client_id": "687613347118-7qae01rk7rhn2m2ks2s6motshlm3dvic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBok5st0IYesQ_tBtWCz43Z1nP7cZicOsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687613347118-7qae01rk7rhn2m2ks2s6motshlm3dvic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

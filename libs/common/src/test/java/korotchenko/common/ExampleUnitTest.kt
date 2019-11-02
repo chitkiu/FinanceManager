@@ -1,4 +1,4 @@
-package korotchenko.logic
+package korotchenko.common
 
 import org.junit.Test
 

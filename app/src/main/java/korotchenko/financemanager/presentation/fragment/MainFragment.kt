@@ -2,7 +2,6 @@ package korotchenko.financemanager.presentation.fragment
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
@@ -21,16 +20,16 @@ class MainFragment : BaseFragment<MainPresenter>(), MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        nav_view.setOnNavigationItemSelectedListener { menuItem ->
+        navView.setOnNavigationItemSelectedListener { menuItem ->
             showFragmentByItemId(menuItem.itemId)
             return@setOnNavigationItemSelectedListener true
         }
-        nav_view.selectedItemId = savedInstanceState?.getInt(SELECTED_ITEM_ID_KEY, R.id.navigation_dashboard) ?: R.id.navigation_dashboard
+        navView.selectedItemId = savedInstanceState?.getInt(SELECTED_ITEM_ID_KEY, R.id.navigation_dashboard) ?: R.id.navigation_dashboard
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(SELECTED_ITEM_ID_KEY, nav_view.selectedItemId)
+        outState.putInt(SELECTED_ITEM_ID_KEY, navView.selectedItemId)
     }
 
     private fun showFragmentByItemId(itemId: Int) {
@@ -42,7 +41,7 @@ class MainFragment : BaseFragment<MainPresenter>(), MainView {
             }
             R.id.navigation_transactions -> {
                 showFragment(
-                    TransactionFragment.newInstance()
+                    TransactionsFragment.newInstance()
                 )
             }
             R.id.navigation_accounts -> {

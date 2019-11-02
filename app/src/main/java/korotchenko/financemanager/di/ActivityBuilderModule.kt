@@ -21,13 +21,10 @@ abstract class ActivityBuilderModule {
     abstract fun signInFragment(): SignInFragment
 
     @ContributesAndroidInjector
-    abstract fun expensesFragment(): ExpensesFragment
+    abstract fun expensesFragment(): TransactionsFragment
 
     @ContributesAndroidInjector
     abstract fun mainFragment(): MainFragment
-
-    @ContributesAndroidInjector
-    abstract fun transactionFragment(): TransactionFragment
 
     @ContributesAndroidInjector
     abstract fun dashboardFragment(): DashboardFragment

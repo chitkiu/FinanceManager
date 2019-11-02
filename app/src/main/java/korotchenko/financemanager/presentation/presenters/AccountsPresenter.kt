@@ -31,14 +31,14 @@ class AccountsPresenter @Inject constructor(
             }
             is AccountDelete -> {
                 accountDataRepository
-                    .deleteAccount(accountAction.accountModel)
+                    .delete(accountAction.accountModel)
                     .safeSubscribe {
                         updateAccountsList()
                     }
             }
             is AccountCreate -> {
                 accountDataRepository
-                    .saveAccount(accountAction.accountModel)
+                    .saveModel(accountAction.accountModel)
                     .safeSubscribe {
                         updateAccountsList()
                     }
@@ -48,7 +48,7 @@ class AccountsPresenter @Inject constructor(
 
     private fun updateAccountsList() {
         accountDataRepository
-            .getAccountsList()
+            .getAllModels()
             .safeSubscribe { accountsList ->
                 view?.showAccounts(accountsList)
                 transferDataManager.sendAccounts(accountsList)

@@ -5,7 +5,7 @@ import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.presentation.base.BaseView
 import korotchenko.financemanager.presentation.presenters.DashboardPresenter
-import korotchenko.logic.models.CredentialModel
+import korotchenko.common.models.CredentialModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 interface DashboardView : BaseView{

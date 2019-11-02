@@ -10,7 +10,7 @@ import korotchenko.financemanager.presentation.base.BaseView
 import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
 import korotchenko.financemanager.presentation.fragment.adapters.AccountsAdapter
 import korotchenko.financemanager.presentation.presenters.AccountsPresenter
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import kotlinx.android.synthetic.main.fragment_accounts.*
 import javax.inject.Inject
 

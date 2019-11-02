@@ -1,4 +1,4 @@
-package korotchenko.logic.models
+package korotchenko.common.models
 
 import org.threeten.bp.LocalDateTime
 

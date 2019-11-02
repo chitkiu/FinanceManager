@@ -4,20 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
 import korotchenko.financemanager.presentation.communicators.AccountDelete
 import korotchenko.financemanager.presentation.communicators.AccountSelect
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import kotlinx.android.synthetic.main.account_view_item.view.*
 
 
 class AccountsAdapter(
     private val moneySymbol: String,
     private val accountActionCommunicator: AccountActionCommunicator,
-    private var accountsList: List<AccountModel>
+    private var accountsList: List<AccountModel> = emptyList()
 ) : RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {

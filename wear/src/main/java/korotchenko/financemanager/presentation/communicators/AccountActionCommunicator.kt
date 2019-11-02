@@ -2,7 +2,7 @@ package korotchenko.financemanager.presentation.communicators
 
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import javax.inject.Inject
 import javax.inject.Singleton
 

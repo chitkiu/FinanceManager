@@ -5,53 +5,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.activity.MainActivity
-import korotchenko.logic.models.CredentialModel
+import korotchenko.common.models.CredentialModel
+import javax.inject.Inject
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment<P : BasePresenter<out BaseView>> : BaseMVPFragment<P>(), BaseView {
+
+    @Inject
+    lateinit var presenter: P
+
+    override fun getViewPresenter(): P = presenter
+
+    val TAG: String = javaClass.simpleName
 
     protected val mainActivity: MainActivity?
         get() {
             return activity as? MainActivity
         }
 
-    protected val googleSignInClient: GoogleSignInClient?
-        get() = mainActivity?.googleSignInClient
-
     abstract val layoutID: Int
-
-    val TAG: String = javaClass.simpleName
-
-    protected lateinit var compositeDisposable: CompositeDisposable
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        compositeDisposable = CompositeDisposable()
         return inflater.inflate(layoutID, container, false)
-    }
-
-    override fun onPause() {
-        compositeDisposable.dispose()
-        super.onPause()
     }
 
     protected fun getSignInCredentials(): CredentialModel? {
@@ -74,64 +55,13 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected fun showFragment(
-        fragment: BaseFragment,
+        fragment: BaseFragment<out BasePresenter<out BaseView>>,
         container: Int = R.id.fragment_container,
+        blockFragmentRepeat: Boolean = false,
         addInBackStack: Boolean = true,
         shouldAddOrReplace: Boolean = true
     ) {
-        mainActivity?.showFragment(fragment, container, addInBackStack, shouldAddOrReplace)
-    }
-
-    protected fun <T> Observable<T>.safeSubscribe(
-        onNext: (T) -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Observable<T>.safeSubscribe(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
-    }
-
-    protected fun <T> Single<T>.safeSubscribe(
-        onNext: (T) -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Single<T>.safeSubscribe(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
-    }
-
-    protected fun <T> Maybe<T>.safeSubscribe(
-        onNext: (T) -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Maybe<T>.safeSubscribe(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
-    }
-
-    protected fun <T> Completable.safeSubscribe(
-        onNext: () -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Completable.safeSubscribe(
-        onNext: () -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
+        mainActivity?.showFragment(fragment, container, blockFragmentRepeat, addInBackStack, shouldAddOrReplace)
     }
 
 }

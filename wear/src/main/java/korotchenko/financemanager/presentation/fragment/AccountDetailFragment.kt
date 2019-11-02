@@ -1,12 +1,11 @@
 package korotchenko.financemanager.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.wear.widget.SwipeDismissFrameLayout
 import korotchenko.financemanager.R
 import korotchenko.financemanager.presentation.base.BaseFragment
-import korotchenko.logic.models.AccountModel
+import korotchenko.common.models.AccountModel
 import kotlinx.android.synthetic.main.activity_account_details.*
 
 //TODO: Make inner view scrollable

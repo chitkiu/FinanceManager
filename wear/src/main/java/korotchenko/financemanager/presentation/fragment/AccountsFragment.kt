@@ -13,8 +13,8 @@ import korotchenko.financemanager.presentation.base.BaseFragment
 import korotchenko.financemanager.presentation.communicators.AccountAction
 import korotchenko.financemanager.presentation.communicators.AccountActionCommunicator
 import korotchenko.financemanager.presentation.communicators.AccountSelect
-import korotchenko.logic.models.AccountModel
-import korotchenko.logic.presenter.AccountModelMapper
+import korotchenko.common.models.AccountModel
+import korotchenko.common.presenter.AccountModelMapper
 import kotlinx.android.synthetic.main.activity_account.*
 import javax.inject.Inject
 

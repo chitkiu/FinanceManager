@@ -37,19 +37,11 @@ abstract class BaseFragment<P : BasePresenter<out BaseView>> : BaseMVPFragment<P
 
     abstract val layoutID: Int
 
-    protected lateinit var compositeDisposable: CompositeDisposable
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        compositeDisposable = CompositeDisposable()
         return inflater.inflate(layoutID, container, false)
-    }
-
-    override fun onPause() {
-        compositeDisposable.dispose()
-        super.onPause()
     }
 
     protected fun getSignInCredentials(): CredentialModel? {
@@ -79,58 +71,6 @@ abstract class BaseFragment<P : BasePresenter<out BaseView>> : BaseMVPFragment<P
         shouldAddOrReplace: Boolean = true
     ) {
         mainActivity?.showFragment(fragment, container, blockFragmentRepeat, addInBackStack, shouldAddOrReplace)
-    }
-
-    protected fun <T> Observable<T>.safeSubscribe(
-        onNext: (T) -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Observable<T>.safeSubscribe(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
-    }
-
-    protected fun <T> Single<T>.safeSubscribe(
-        onNext: (T) -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Single<T>.safeSubscribe(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
-    }
-
-    protected fun <T> Maybe<T>.safeSubscribe(
-        onNext: (T) -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Maybe<T>.safeSubscribe(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
-    }
-
-    protected fun <T> Completable.safeSubscribe(
-        onNext: () -> Unit
-    ) {
-        compositeDisposable += subscribe(onNext, ::handleError)
-    }
-
-    protected fun <T> Completable.safeSubscribe(
-        onNext: () -> Unit,
-        onError: (Throwable) -> Unit = ::handleError
-    ) {
-        compositeDisposable += subscribe(onNext, onError)
     }
 
 }

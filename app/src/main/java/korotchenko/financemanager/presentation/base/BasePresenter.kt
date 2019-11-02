@@ -26,14 +26,12 @@ abstract class BasePresenter<V : BaseView> {
 
     @CallSuper
     fun attach(view: V) {
-        Log.e("BasePresenter", "attach")
         this.view = view
         compositeDisposable = CompositeDisposable()
     }
 
     @CallSuper
     fun detach() {
-        Log.e("BasePresenter", "detach")
         compositeDisposable?.dispose()
         this.view = null
     }

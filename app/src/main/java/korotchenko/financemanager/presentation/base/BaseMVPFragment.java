@@ -1,10 +1,7 @@
 package korotchenko.financemanager.presentation.base;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +40,12 @@ public abstract class BaseMVPFragment<P extends BasePresenter> extends Fragment 
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_FIRST_ATTACH, isFirstAttach);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        getViewPresenter().attach(this);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

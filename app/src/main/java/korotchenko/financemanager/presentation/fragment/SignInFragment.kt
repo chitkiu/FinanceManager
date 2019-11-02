@@ -23,28 +23,23 @@ class SignInFragment : BaseFragment<SignInPresenter>(), SignInView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e(TAG, "onViewCreated")
         sign_in_button.setOnClickListener {
             presenter.signIn()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.e(TAG, "onActivityResult")
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == GOOGLE_SIGN_IN) {
-            Log.e(TAG, "onActivityResult requestCode == GOOGLE_SIGN_IN ${requestCode == GOOGLE_SIGN_IN}")
             presenter.handleSignInResult(data)
         }
     }
 
     override fun startActivityForResult(intent: Intent) {
-        Log.e(TAG, "startActivityForResult")
         startActivityForResult(intent, GOOGLE_SIGN_IN)
     }
 
     override fun successSignIn() {
-        Log.e(TAG, "successSignIn")
         showFragment(
             fragment = MainFragment.newInstance(),
             container = R.id.fragment_container,
@@ -54,7 +49,6 @@ class SignInFragment : BaseFragment<SignInPresenter>(), SignInView {
     }
 
     override fun failedSignIn() {
-        Log.e(TAG, "failedSignIn")
         sign_in_button.visibility = View.VISIBLE
     }
 

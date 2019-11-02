@@ -2,7 +2,6 @@ package korotchenko.financemanager.presentation.presenters
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
@@ -10,7 +9,6 @@ import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import korotchenko.financemanager.presentation.base.BasePresenter
-import korotchenko.financemanager.presentation.fragment.SignInFragment
 import korotchenko.financemanager.presentation.fragment.SignInView
 import javax.inject.Inject
 
@@ -33,7 +31,6 @@ class SignInPresenter @Inject constructor(
     }
 
     fun signIn() {
-        Log.e("SignInPresenter", "signIn")
         view?.startActivityForResult(googleSignInClient.signInIntent)
     }
 
@@ -43,12 +40,10 @@ class SignInPresenter @Inject constructor(
             task
                 .getResult(ApiException::class.java)
                 ?.let {
-                    Log.e("SignInPresenter", "handleSignInResult getResult")
-                    view!!.successSignIn()
+                    view?.successSignIn()
                 }
                 ?: view?.failedSignIn()
         } catch (e: ApiException) {
-            Log.e("SignInPresenter", "handleSignInResult e $e")
             view?.failedSignIn()
         }
     }

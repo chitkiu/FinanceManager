@@ -16,7 +16,7 @@ import korotchenko.financemanager.data.db.DBHelper
 class DataModule {
 
     @Provides
-    fun context(app: Application): Context = app.baseContext
+    fun context(app: Application): Context = app.applicationContext
 
     @Provides
     fun dbHelper(context: Context): SQLiteOpenHelper = DBHelper(context)

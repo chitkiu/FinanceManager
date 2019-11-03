@@ -38,6 +38,7 @@ object TransactionsTable: DBTable<TransactionModel>("transactions") {
         val idColumn = cursor.getColumnIndex(TransactionModel.ID_KEY)
         val descriptionColumn = cursor.getColumnIndex(TransactionModel.DESCRIPTION_KEY)
         val sumColumn = cursor.getColumnIndex(TransactionModel.SUM_KEY)
+        val transactionTypeIdColumn = cursor.getColumnIndex(TransactionModel.TRANSACTION_TYPE_ID_KEY)
         val categoryIdColumn = cursor.getColumnIndex(TransactionModel.CATEGORY_ID_KEY)
         val dateColumn = cursor.getColumnIndex(TransactionModel.DATE_KEY)
 
@@ -45,6 +46,7 @@ object TransactionsTable: DBTable<TransactionModel>("transactions") {
             id = cursor.getLong(idColumn),
             description = cursor.getString(descriptionColumn),
             sum = cursor.getDouble(sumColumn),
+            transactionTypeId = cursor.getInt(transactionTypeIdColumn),
             categoryId = cursor.getLong(categoryIdColumn),
             date = cursor.getString(dateColumn)
         )
@@ -55,6 +57,7 @@ object TransactionsTable: DBTable<TransactionModel>("transactions") {
         contentValues.put(TransactionModel.ID_KEY, obj.id)
         contentValues.put(TransactionModel.DESCRIPTION_KEY, obj.description)
         contentValues.put(TransactionModel.SUM_KEY, obj.sum)
+        contentValues.put(TransactionModel.TRANSACTION_TYPE_ID_KEY, obj.transactionTypeId)
         contentValues.put(TransactionModel.CATEGORY_ID_KEY, obj.categoryId)
         contentValues.put(TransactionModel.DATE_KEY, obj.date)
         return contentValues

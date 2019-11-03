@@ -35,21 +35,6 @@ abstract class BaseFragment<P : BasePresenter<out BaseView>> : BaseMVPFragment<P
         return inflater.inflate(layoutID, container, false)
     }
 
-    protected fun getSignInCredentials(): CredentialModel? {
-        val account = GoogleSignIn.getLastSignedInAccount(context)
-        return account?.let {
-            mapToCredentialModel(account)
-        }
-    }
-
-    protected fun mapToCredentialModel(account: GoogleSignInAccount): CredentialModel {
-        return CredentialModel(
-            account.email ?: "",
-            account.givenName ?: "",
-            account.familyName ?: ""
-        )
-    }
-
     protected fun handleError(e: Throwable) {
         Log.d(TAG, e.localizedMessage)
     }

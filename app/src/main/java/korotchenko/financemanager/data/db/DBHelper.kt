@@ -26,7 +26,7 @@ class DBHelper: SQLiteOpenHelper {
     companion object {
         private const val DB_NAME = "db"
 
-        private const val DB_VERSION = 3
+        private const val DB_VERSION = 4
 
         private val ACCOUNT_TABLE_CREATE_SQL_REQUEST = "CREATE TABLE IF NOT EXISTS ${AccountsTable.tableName}(" +
                 "${AccountModel.ID_KEY} INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,6 +41,7 @@ class DBHelper: SQLiteOpenHelper {
                 "${TransactionModel.ID_KEY} INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "${TransactionModel.DESCRIPTION_KEY} TEXT, " +
                 "${TransactionModel.SUM_KEY} REAL NOT NULL, " +
+                "${TransactionModel.TRANSACTION_TYPE_ID_KEY} INTEGER NOT NULL, " +
                 "${TransactionModel.CATEGORY_ID_KEY} INTEGER NOT NULL, " +
                 "${TransactionModel.DATE_KEY} TEXT NOT NULL " +
                 ");"

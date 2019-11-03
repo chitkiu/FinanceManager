@@ -25,8 +25,11 @@ class TransactionsFragment : BaseFragment<TransactionsPresenter>(), Transactions
         super.onViewCreated(view, savedInstanceState)
 
         fabAddExpense.setOnClickListener {
-
+            showFragment(
+                AddTransactionFragment.newInstance()
+            )
         }
+
         transactionsAdapter = TransactionAdapter({})
 
         expensesList.layoutManager = LinearLayoutManager(context)

@@ -4,8 +4,9 @@ import java.io.Serializable
 
 data class TransactionModel(
     val id: Long,
-    val description: String = "",
+    val description: String?,
     val sum: Double,
+    val transactionTypeId: Int,
     val categoryId: Long,
     val date: String
 ) : Serializable {
@@ -13,6 +14,7 @@ data class TransactionModel(
         const val ID_KEY = "id"
         const val DESCRIPTION_KEY = "description"
         const val SUM_KEY = "sum"
+        const val TRANSACTION_TYPE_ID_KEY = "transaction_type_id"
         const val CATEGORY_ID_KEY = "category_id"
         const val DATE_KEY = "date"
     }

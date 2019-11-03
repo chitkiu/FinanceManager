@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sumInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:errorEnabled="true"
+        app:hintEnabled="true"
+        android:hint="Transaction sum"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sumEdittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/transactionType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select transaction type: "
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumInputLayout"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/transactionTypeSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NONE"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/transactionType"
+        app:layout_constraintTop_toTopOf="@+id/transactionType"/>
+
+    <TextView
+        android:id="@+id/transactionCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select transaction category: "
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/transactionType"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/transactionCategorySelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NONE"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/transactionCategory"
+        app:layout_constraintTop_toTopOf="@+id/transactionCategory"/>
+
+    <TextView
+        android:id="@+id/transactionDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select transaction date: "
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/transactionCategory"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/transactionDateSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NONE"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/transactionDate"
+        app:layout_constraintTop_toTopOf="@+id/transactionDate"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/descriptionInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="false"
+        app:hintEnabled="true"
+        android:hint="Description"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionDate"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/descriptionEdittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_navigate_next"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,10 @@ abstract class ActivityBuilderModule {
     abstract fun signInFragment(): SignInFragment
 
     @ContributesAndroidInjector
-    abstract fun expensesFragment(): TransactionsFragment
+    abstract fun transactionsFragment(): TransactionsFragment
+
+    @ContributesAndroidInjector
+    abstract fun addTransactionFragment(): AddTransactionFragment
 
     @ContributesAndroidInjector
     abstract fun mainFragment(): MainFragment

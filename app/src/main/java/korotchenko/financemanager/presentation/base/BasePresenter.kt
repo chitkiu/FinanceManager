@@ -20,13 +20,14 @@ abstract class BasePresenter<V : BaseView> {
 
     protected var view: V? = null
 
-    open fun onViewAttach(isFirstAttach: Boolean) {
-
-    }
+    open fun onViewAttach(isFirstAttach: Boolean) {}
 
     @CallSuper
     fun attach(view: V) {
-        this.view = view
+        if(this.view != view) {
+            this.view = view
+        }
+        compositeDisposable?.dispose()
         compositeDisposable = CompositeDisposable()
     }
 
